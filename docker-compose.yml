@@ -1,0 +1,53 @@
+services:
+    # PHP Service
+    smm_duck_backend:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        container_name: smm_duck_backend
+        tty: true
+        environment:
+            SERVICE_NAME: smm_duck_backend
+            SERVICE_TAGS: dev
+        working_dir: /var/www
+        volumes:
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+            - ./:/var/www/
+        networks:
+            - app-network
+        depends_on:
+            - smm_duck_backend_postgres
+
+    # Nginx Service
+    smm_duck_backend_nginx:
+        image: nginx:alpine
+        container_name: smm_duck_backend_nginx
+        tty: true
+        ports:
+            - "8081:80"
+            - "4433:443"
+        volumes:
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+            - ./:/var/www
+        networks:
+            - app-network
+
+    smm_duck_backend_postgres:
+        image: postgres:latest
+        container_name: smm_duck_backend_postgres
+        tty: true
+        environment:
+            POSTGRES_HOST_AUTH_METHOD: "trust"
+        volumes:
+            - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        ports:
+            - "5432:5432"
+        networks:
+            - app-network
+
+
+# Docker Networks
+networks:
+    app-network:
+        driver: bridge
