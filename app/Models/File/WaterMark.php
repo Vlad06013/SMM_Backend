@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property boolean $repeatable Повторяющийся
  * @property integer $x_position Процент по горизонтали
  * @property integer $y_position Процент по вертикали
- * @property AttachmentFiles $attachment Файл
+ * @property AttachmentFile $attachment Файл
  * @property string $created_at Дата время создания
  * @property string $updated_at Дата время обновления
  */
@@ -36,6 +36,6 @@ class WaterMark extends Model
      */
     public  function attachment(): BelongsTo
     {
-        return $this->belongsTo(AttachmentFiles::class,'attachment_id','id');
+        return $this->belongsTo(AttachmentFile::class,'attachment_id','id');
     }
 }

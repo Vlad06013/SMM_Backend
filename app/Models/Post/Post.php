@@ -2,7 +2,8 @@
 
 namespace App\Models\Post;
 
-use App\Models\File\AttachmentFiles;
+use App\Models\File\AttachmentFile;
+use App\Models\Relations\HasManySyncable;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,7 +21,7 @@ use Illuminate\Support\Collection;
  * @property User $creator Создатель
  * @property Collection<PostSchedule> $schedule Расписание
  * @property Collection<Link> $links Ссылки
- * @property Collection<AttachmentFiles> $attachments Вложения
+ * @property Collection<AttachmentFile> $attachments Вложения
  * @property Collection<PostChannel> $channels Каналы
  * @property string $created_at Дата время создания
  * @property string $updated_at Дата время обновления
@@ -62,17 +63,29 @@ class Post extends Model
      */
     public function links(): HasMany
     {
-        return $this->hasMany(Link::class);
+        return $this->hasManySync(Link::class);
     }
 
     /**
      * Вложения
      *
-     * @return HasManyThrough
+//     * @return HasManyThrough
      */
-    public function attachments(): HasManyThrough
+//    public function attachments(): HasManyThrough
+//    {
+//        return $this->hasManyThrough(
+//            AttachmentFile::class,
+//            PostHasAttachment::class,
+//            'post_id',
+//            'id',
+//            'id',
+//            'attachment_id'
+//        );
+//    }
+
+    public function attachments()
     {
-        return $this->hasManyThrough(PostHasAttachment::class, AttachmentFiles::class);
+        return $this->hasManySync(PostHasAttachment::class);
     }
 
     /**
@@ -83,5 +96,21 @@ class Post extends Model
     public function channels(): BelongsToMany
     {
         return $this->belongsToMany(PostChannel::class);
+    }
+
+    /**
+     * Overrides the default Eloquent hasMany relationship to return a HasManySyncable.
+     */
+    public function hasManySync($related, $foreignKey = null, $localKey = null): HasManySyncable
+    {
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignKey = $foreignKey ?: $this->getForeignKey();
+
+        $localKey = $localKey ?: $this->getKeyName();
+
+        return new HasManySyncable(
+            $instance->newQuery(), $this, $instance->getTable() . '.' . $foreignKey, $localKey
+        );
     }
 }

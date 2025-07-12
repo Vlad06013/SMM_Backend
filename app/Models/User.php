@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
+ * @property string $id Ид
  * @property string $name Имя в телеграм
  * @property string $telegram_id Ид в телеграм
  * @property string $login Логин в телеграм

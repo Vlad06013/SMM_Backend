@@ -49,6 +49,7 @@ class ApiCrudUsers extends TestCase
                     ],
                 ]
             ]);
+        dd();
     }
 
     public function seedUser(): array

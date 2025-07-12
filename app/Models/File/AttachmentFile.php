@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at Дата время создания
  * @property string $updated_at Дата время обновления
  */
-class AttachmentFiles extends Model
+class AttachmentFile extends Model
 {
     protected $fillable = [
         'name',

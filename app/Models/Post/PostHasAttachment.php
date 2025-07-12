@@ -2,7 +2,9 @@
 
 namespace App\Models\Post;
 
+use App\Models\File\AttachmentFile;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property integer $id Ид
@@ -17,4 +19,12 @@ class PostHasAttachment extends Model
         'post_id',
         'attachment_id',
     ];
+
+    protected $with = [
+        'attachment',
+    ];
+    public function attachment(): BelongsTo
+    {
+        return $this->belongsTo(AttachmentFile::class, 'attachment_id');
+    }
 }

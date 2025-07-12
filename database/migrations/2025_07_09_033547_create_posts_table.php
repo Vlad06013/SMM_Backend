@@ -21,7 +21,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('title')->nullable()->comment('Заголовок.');
             $table->mediumText('text');
-            $table->string('status')->default('created')->comment('Статус. (created/confirmed/planed/sended/error/canceled)');
+            $table->string('status')->default('created')->comment('Статус. (created/confirmed/planed/sanded/error/cancelled)');
             $table->softDeletes();
             $table->timestamps();
             $table->comment('Посты.');
