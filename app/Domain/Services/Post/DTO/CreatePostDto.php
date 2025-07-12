@@ -8,7 +8,7 @@ use Carbon\Carbon;
 * @property integer $creator_id Ид создателя
 * @property string $title Заголовок
 * @property string $text Текст сообщения
-* @property Carbon[] $schedule Расписание
+* @property Carbon[] $scheduleDates Расписание
 * @property PostLinkDto[] $links Ссылки
 * @property array $attachmentIds Ид вложений
 * @property array $channelIds Ид каналов

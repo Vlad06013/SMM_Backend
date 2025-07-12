@@ -10,7 +10,6 @@ use App\Domain\Services\User\DTO\CreateUserDto;
 use App\Domain\Services\User\UserService;
 use App\Models\File\AttachmentFile;
 use App\Models\Post\Post;
-use App\Models\Post\PostHasAttachment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,9 +27,9 @@ class PostServiceTest extends TestCase
      */
     public function test_create(): void
     {
-        ['userDto' => $userDto, 'createdUser' => $createdUser] = $this->seedUser();
+        ['createdUser' => $createdUser] = $this->seedUser();
 
-       $this->seedPost($createdUser);
+       $createdPost = $this->seedPost($createdUser);
         $this->assertDatabaseHas('posts',[
             'id' => 1,
             'title' => 'title',
@@ -49,70 +48,11 @@ class PostServiceTest extends TestCase
             'attachment_id' => 1,
         ]);
 
+            $this->assertDatabaseHas('post_schedules', [
+                'post_id' => 1,
+                'send_planed_date' => "2025-07-08 12:30",
+            ]);
     }
-
-//    /**
-//     * Обновление пользователя
-//     *
-//     * @return void
-//     */
-//    public function test_update(): void
-//    {
-//        $userService = app(UserService::class);
-//
-//        ['userDto' => $userDto, 'createdUser' => $createdUser] = $this->seedUser();
-//
-//        $createdUser->name = 'updated_name';
-//        $createdUser->telegram_id = 'updated_telegram_id';
-//        $createdUser->login = 'updated_login';
-//
-//        $updated = $userService->update($createdUser);
-//        $this->assertDatabaseHas('users', $updated->toArray());
-//    }
-//
-//    /**
-//     * Обновление пользователя
-//     *
-//     * @return void
-//     */
-//    public function test_show(): void
-//    {
-//        $userService = app(UserService::class);
-//        ['userDto' => $userDto, 'createdUser' => $createdUser] = $this->seedUser();
-//
-//        $user = $userService->getById($createdUser->id);
-//        $this->assertEquals($createdUser->toArray(), $user->toArray());
-//    }
-//
-//    /**
-//     * Список пользователей пользователя
-//     *
-//     * @return void
-//     */
-//    public function test_index(): void
-//    {
-//        $userService = app(UserService::class);
-//        ['userDto' => $userDto, 'createdUser' => $createdUser] = $this->seedUser();
-//
-//        $users = $userService->index();
-//        foreach ($users as $user) {
-//            $this->assertEquals($createdUser->toArray(), $user->toArray());
-//        }
-//    }
-//
-//    /**
-//     * Удаление пользователя
-//     *
-//     * @return void
-//     */
-//    public function test_delete(): void
-//    {
-//        $userService = app(UserService::class);
-//        ['userDto' => $userDto, 'createdUser' => $createdUser] = $this->seedUser();
-//        $user = $userService->delete($createdUser->id);
-//
-//        $this->assertDatabaseMissing('users', $createdUser->toArray());
-//    }
 
     /**
      * Создание пользователя
@@ -169,7 +109,7 @@ class PostServiceTest extends TestCase
         );
         $createdPost = $postService->create($postDto);
 
-       $createdPost->load('attachments', 'links');
+       $createdPost->load('attachments', 'links', 'schedule');
 
         return $createdPost;
     }

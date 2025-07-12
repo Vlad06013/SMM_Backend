@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->dateTime('send_planed_date')->comment("Запланированная дата постинга.");
-            $table->dateTime('send_actual_date')->comment("Фактическая дата размещения поста.");
+            $table->dateTime('send_actual_date')->nullable()->comment("Фактическая дата размещения поста.");
             $table->timestamps();
             $table->comment('Запланированные даты постинга.');
         });

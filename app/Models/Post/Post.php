@@ -53,7 +53,7 @@ class Post extends Model
      */
     public function schedule(): HasMany
     {
-        return $this->hasMany(PostSchedule::class);
+        return $this->hasManySync(PostSchedule::class);
     }
 
     /**
