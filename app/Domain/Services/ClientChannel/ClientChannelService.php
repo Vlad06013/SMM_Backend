@@ -54,4 +54,15 @@ class ClientChannelService
     {
         return $this->clientChannelStorage->getByUserId($userId);
     }
+
+    /**
+     * Получение канала по Ид
+     *
+     * @param int $channelId
+     * @return ClientChannel|null
+     */
+    public function show(int $channelId): ?ClientChannel
+    {
+        return $this->clientChannelStorage->show($channelId);
+    }
 }

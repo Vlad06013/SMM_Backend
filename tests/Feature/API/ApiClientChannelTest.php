@@ -33,25 +33,29 @@ class ApiClientChannelTest extends TestCase
             ]);
     }
 
-//    public function test_show(): void
-//    {
-//        $user = Seeder::seedUser();
-//        $response = $this->getJson('/api/telegram-webapp/v1/user/' . $user->id);
-//        $response
-//            ->assertStatus(200)
-//            ->assertJson([
-//                'data' => [
-//                    "id" => $user->id,
-//                    "name" => "test",
-//                    "telegram_id" => "111",
-//                    "login" => "111",
-//                    "balance" => [
-//                        'id' => $user->balance->id,
-//                        'value' => 0,
-//                    ],
-//                ]
-//            ]);
-//    }
+    public function test_show(): void
+    {
+        $resource = Seeder::seedPostingResource();
+        $user = Seeder::seedUser();
+        $channel = Seeder::seedClientChannel($user->id);
+        $response = $this->getJson('/api/telegram-webapp/v1/client-channel/' . $user->id);
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    "id" => $channel->id,
+                    "name" => "channelName",
+                    "auto_signature" => false,
+                    "auto_punctuation" => false,
+                    "water_marks_id" => null,
+                    "reposter_id" => null,
+                    "resource" => [
+                        'id' => $resource->id,
+                        'name' => 'telegram',
+                    ],
+                ]
+            ]);
+    }
 //
 //    public function test_store(): void
 //    {
