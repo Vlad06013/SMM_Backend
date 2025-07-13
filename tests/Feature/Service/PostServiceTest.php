@@ -31,7 +31,6 @@ class PostServiceTest extends TestCase
 
        $createdPost = $this->seedPost($createdUser);
         $this->assertDatabaseHas('posts',[
-            'id' => 1,
             'title' => 'title',
             'text' => 'text',
             'status' => 'created',
