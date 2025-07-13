@@ -3,24 +3,21 @@
 namespace App\Domain\Clients\TelegramWebApp\Http\Controllers;
 
 use App\Domain\Clients\TelegramWebApp\Http\Resources\User\UserResource;
-use App\Domain\Clients\TelegramWebApp\Http\Resources\User\UsersResource;
-use App\Domain\Services\User\UserService;
+use App\Domain\Clients\TelegramWebApp\UseCase\User\IndexUser;
+use App\Domain\Clients\TelegramWebApp\UseCase\User\ShowUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
-    public function __construct(protected UserService $userService)
-    {
-    }
 
     /**
      * Display a listing of the resource.
      */
     public function index(): AnonymousResourceCollection
     {
-       return UsersResource::collection($this->userService->index());
+        return app(IndexUser::class)();
     }
 
     /**
@@ -36,7 +33,7 @@ class UserController extends Controller
      */
     public function show(string $id): UserResource
     {
-        return new UserResource($this->userService->getById($id));
+        return app(ShowUser::class)($id);
     }
 
     /**
