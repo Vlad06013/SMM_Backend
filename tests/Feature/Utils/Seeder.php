@@ -20,6 +20,7 @@ use Tests\TestCase;
 
 class Seeder extends TestCase
 {
+
     public static function seedPostingResource(string $name = 'telegram'): PostingResource
     {
         return PostingResource::create([
@@ -50,7 +51,7 @@ class Seeder extends TestCase
 
     public static function seedClientChannel(
         int    $user_id = 1,
-        int    $posting_resources_id = 1,
+        int    $posting_resource_id = 1,
         string $name = 'channelName',
         bool   $auto_signature = false,
         bool   $auto_punctuation = false,
@@ -59,7 +60,7 @@ class Seeder extends TestCase
         $clientChannelService = app(ClientChannelService::class);
         $clientChannelDto = new CreateClientChannelDto(
             user_id: $user_id,
-            posting_resources_id: $posting_resources_id,
+            posting_resource_id: $posting_resource_id,
             name: $name,
             auto_signature: $auto_signature,
             auto_punctuation: $auto_punctuation,

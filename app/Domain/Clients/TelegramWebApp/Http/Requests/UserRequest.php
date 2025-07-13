@@ -4,7 +4,7 @@ namespace App\Domain\Clients\TelegramWebApp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUser extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,9 @@ class CreateUser extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'telegram_id' => ['required', 'string'],
-            'login' => ['required', 'string'],
+            'name' => ['nullable', 'string'],
+            'telegram_id' => ['nullable', 'string'],
+            'login' => ['nullable', 'string'],
         ];
     }
 }

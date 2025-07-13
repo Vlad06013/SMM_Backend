@@ -2,6 +2,7 @@
 
 namespace Service;
 
+use App\Domain\Services\User\DTO\UpdateUserDto;
 use App\Domain\Services\User\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
@@ -41,12 +42,14 @@ class UserServiceTest extends TestCase
         $userService = app(UserService::class);
 
         $createdUser = Seeder::seedUser();
+        $updateDto = new UpdateUserDto(
+            id: $createdUser->id,
+            name: 'updated_name',
+            telegram_id: 'updated_telegram_id',
+            login: 'updated_login',
+        );
 
-        $createdUser->name = 'updated_name';
-        $createdUser->telegram_id = 'updated_telegram_id';
-        $createdUser->login = 'updated_login';
-
-        $updated = $userService->update($createdUser);
+        $updated = $userService->update($updateDto);
         $this->assertDatabaseHas('users',
             [
                 "id" => $createdUser->id,

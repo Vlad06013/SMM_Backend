@@ -14,12 +14,14 @@ use App\Repository\PostStorage;
 class PostService
 {
     public function __construct(
-        protected PostStorage $postStorage,
-        protected LinkService $linkService,
-        protected AttachmentService $attachmentService,
-        protected PostScheduleService $postScheduleService,
+        protected PostStorage          $postStorage,
+        protected LinkService          $linkService,
+        protected AttachmentService    $attachmentService,
+        protected PostScheduleService  $postScheduleService,
         protected ClientChannelService $clientChannelService,
-    ){}
+    )
+    {
+    }
 
     /**
      * Создание поста
@@ -36,13 +38,13 @@ class PostService
         $postModel->text = $postDto->text;
         $postModel->status = PostStatusEnum::CREATED;
 
-       $post = $this->postStorage->store($postModel);
+        $post = $this->postStorage->store($postModel);
 
-       $this->linkService->syncToPost($post, $postDto->links);
-       $this->attachmentService->syncToPost($post, $postDto->attachmentIds);
-       $this->postScheduleService->syncToPost($post, $postDto->scheduleDates);
-       $this->clientChannelService->syncToPost($post, $postDto->channelIds);
+        $this->linkService->syncToPost($post, $postDto->links);
+        $this->attachmentService->syncToPost($post, $postDto->attachmentIds);
+        $this->postScheduleService->syncToPost($post, $postDto->scheduleDates);
+        $this->clientChannelService->syncToPost($post, $postDto->channelIds);
 
-       return $post;
+        return $post;
     }
 }

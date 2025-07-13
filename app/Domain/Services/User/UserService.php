@@ -4,6 +4,7 @@ namespace App\Domain\Services\User;
 
 use App\Domain\Services\BalanceAccount\BalanceAccountService;
 use App\Domain\Services\User\DTO\CreateUserDto;
+use App\Domain\Services\User\DTO\UpdateUserDto;
 use App\Models\User;
 use App\Repository\UserStorage;
 use Illuminate\Support\Collection;
@@ -35,11 +36,17 @@ class UserService
     /**
      * Обновление пользователя
      *
-     * @param User $user
+     * @param UpdateUserDto $userDto
      * @return User|null
      */
-    public function update(User $user): ?User
+    public function update(UpdateUserDto $userDto): ?User
     {
+        $user = $this->userStorage->show($userDto->id);
+        $userDto = collect($userDto)->filter(function ($value) {
+            return !is_null($value);
+        })->all();
+        $user->fill($userDto);
+
         $this->userStorage->update($user);
 
         return $user->fresh();

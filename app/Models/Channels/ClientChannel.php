@@ -13,13 +13,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * @property integer $id Ид
  * @property integer $user_id Ид пользователя
- * @property integer $posting_resources_id Ид постинг - ресурса
+ * @property integer $posting_resource_id Ид постинг - ресурса
  * @property string $name Имя канала
  * @property boolean $auto_signature Активность Авто-подписи
  * @property boolean $auto_punctuation Активность Авто-пунктуации
  * @property integer $water_marks_id Ид Водяного знака
  * @property boolean $reposter_id Ид репостера
- * @property PostingResource $postingResources Постинг - ресурс
+ * @property PostingResource $postingResource Постинг - ресурс
  * @property WaterMark $waterMark Водяной знак
  * @property Reposter $reposter Репостер
  * @property User $user Пользователь
@@ -30,7 +30,7 @@ class ClientChannel extends Model
 {
     protected $fillable = [
         'user_id',
-        'posting_resources_id',
+        'posting_resource_id',
         'name',
         'auto_signature',
         'auto_punctuation',
@@ -51,14 +51,15 @@ class ClientChannel extends Model
     public  function user(): BelongsTo{
         return $this->belongsTo(User::class);
     }
+
     /**
      * Ресурс постинга
      *
-     * @return HasOne
+     * @return BelongsTo
      */
-    public  function postingResources(): HasOne
+    public  function postingResource(): BelongsTo
     {
-        return $this->hasOne(PostingResource::class);
+        return $this->belongsTo(PostingResource::class, 'posting_resource_id');
     }
 
     /**

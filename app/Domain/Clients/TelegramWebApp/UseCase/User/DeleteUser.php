@@ -3,16 +3,15 @@
 namespace App\Domain\Clients\TelegramWebApp\UseCase\User;
 
 use App\Domain\Clients\TelegramWebApp\Http\Resources\User\UserResource;
-use App\Domain\Services\User\DTO\CreateUserDto;
 use App\Domain\Services\User\UserService;
 
-class StoreUser
+class DeleteUser
 {
     public function __construct(protected UserService $userService)
     {
     }
-    public function __invoke(CreateUserDto $createUserDto): UserResource
+    public function __invoke(int $id): UserResource
     {
-        return new UserResource($this->userService->create($createUserDto));
+        return new UserResource($this->userService->delete($id));
     }
 }

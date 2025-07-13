@@ -4,7 +4,7 @@ namespace App\Domain\Services\ClientChannel\DTO;
 
 /**
  * @property integer $user_id Ид Пользователя
- * @property integer $posting_resources_id Ид постинг - ресурса
+ * @property integer $posting_resource_id Ид постинг - ресурса
  * * @property string $name Имя канала
  * * @property boolean $auto_signature Активность Авто-подписи
  * * @property boolean $auto_punctuation Активность Авто-пунктуации
@@ -15,7 +15,7 @@ class CreateClientChannelDto
 {
     public function __construct(
         public int $user_id,
-        public int $posting_resources_id,
+        public int $posting_resource_id,
         public string $name,
         public bool $auto_signature,
         public bool $auto_punctuation,

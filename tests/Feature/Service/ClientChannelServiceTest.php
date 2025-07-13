@@ -2,14 +2,7 @@
 
 namespace Service;
 
-use App\Domain\Services\Post\DTO\CreatePostDto;
-use App\Domain\Services\Post\DTO\PostLinkDto;
-use App\Domain\Services\Post\PostService;
-use App\Domain\Services\User\DTO\CreateUserDto;
-use App\Domain\Services\User\UserService;
-use App\Models\Post\Post;
-use App\Models\User;
-use Carbon\Carbon;
+use App\Domain\Services\ClientChannel\ClientChannelService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
@@ -20,7 +13,7 @@ class ClientChannelServiceTest extends TestCase
 
 
     /**
-     * Создание пользователя с балансом
+     * Создание канала пользователя
      *
      * @return void
      */
@@ -28,16 +21,41 @@ class ClientChannelServiceTest extends TestCase
     {
         $resource = Seeder::seedPostingResource();
         $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel($user->id);
-
+        $channel = Seeder::seedClientChannel($user->id, $resource->id);
 
         $this->assertDatabaseHas('client_channels', [
             'user_id' => $user->id,
-            'posting_resources_id' => $resource->id,
+            'posting_resource_id' => $resource->id,
             'name' => 'channelName',
             'auto_signature' => false,
             'auto_punctuation' => false,
         ]);
+    }
+
+    public function test_getByUserID(): void
+    {
+        $resource = Seeder::seedPostingResource();
+        $user = Seeder::seedUser();
+        $channelCreated = Seeder::seedClientChannel($user->id, $resource->id);
+
+        $channelService = app(ClientChannelService::class);
+        $userChannels = $channelService->getByUserId($user->id);
+        $channel = $userChannels->first();
+        $channelArray = $channel->toArray();
+        unset($channelArray['created_at'], $channelArray['updated_at']);
+        $this->assertEquals(
+            [
+                "id" => $channelCreated->id,
+                "user_id" => $user->id,
+                "posting_resource_id" => $resource->id,
+                "name" => 'channelName',
+                "auto_signature" => false,
+                'auto_punctuation' => false,
+                'water_marks_id' => null,
+                'reposter_id' => null,
+            ],
+            $channelArray);
+
     }
 
 }

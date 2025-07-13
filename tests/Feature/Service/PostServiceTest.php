@@ -12,7 +12,6 @@ class PostServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-
     /**
      * Создание пользователя с балансом
      *
@@ -26,7 +25,7 @@ class PostServiceTest extends TestCase
             'attachment' => $attachment,
             'channel' => $channel,
             'post' => $post
-        ] = $this->seeder();
+        ] = $this->seedData();
 
         $this->assertDatabaseHas('posts', [
             'title' => 'title',
@@ -57,7 +56,7 @@ class PostServiceTest extends TestCase
     }
 
 
-    public function seeder(): array
+    public function seedData(): array
     {
         $resource = Seeder::seedPostingResource();
         $user = Seeder::seedUser();

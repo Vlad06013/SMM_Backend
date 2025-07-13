@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Models\Channels\ClientChannel;
 use App\Models\Post\Post;
+use Illuminate\Support\Collection;
 
 /**
  * @property string $model
@@ -29,5 +30,17 @@ final class ClientChannelStorage extends CrudStorage
         return $post->channels()->sync(array_map(function ($postChannelId){
             return ['channel_id'=>$postChannelId];
         }, $postChannelIds));
+    }
+
+    /**
+     * Список каналов пользователя
+     *
+     * @param int $userId
+     * @return Collection<ClientChannel>|null
+     */
+    public function getByUserId(int $userId): ?Collection
+    {
+        return app(self::$model)->where('user_id', $userId)->get();
+
     }
 }

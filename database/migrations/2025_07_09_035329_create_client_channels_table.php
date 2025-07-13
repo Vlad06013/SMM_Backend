@@ -19,8 +19,8 @@ return new class extends Migration
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->unsignedBigInteger('posting_resources_id')->comment('Ид ресурса.');
-            $table->foreign('posting_resources_id')
+            $table->unsignedBigInteger('posting_resource_id')->comment('Ид ресурса.');
+            $table->foreign('posting_resource_id')
                 ->references('id')
                 ->on('posting_resources')
                 ->onUpdate('cascade')
