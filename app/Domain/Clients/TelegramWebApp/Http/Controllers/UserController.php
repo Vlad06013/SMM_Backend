@@ -2,9 +2,12 @@
 
 namespace App\Domain\Clients\TelegramWebApp\Http\Controllers;
 
+use App\Domain\Clients\TelegramWebApp\Http\Requests\CreateUser;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\User\UserResource;
 use App\Domain\Clients\TelegramWebApp\UseCase\User\IndexUser;
 use App\Domain\Clients\TelegramWebApp\UseCase\User\ShowUser;
+use App\Domain\Clients\TelegramWebApp\UseCase\User\StoreUser;
+use App\Domain\Services\User\DTO\CreateUserDto;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -23,9 +26,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateUser $request)
     {
-        //
+        $createUserDto = new CreateUserDto(...$request->all());
+        return app(StoreUser::class)($createUserDto);
     }
 
     /**

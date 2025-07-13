@@ -26,6 +26,7 @@ class UserService
     {
         $balanceAccount = $this->balanceAccountService->create();
         $user = new User((array)$dto);
+
         $user->balance_id = $balanceAccount->id;
 
         return $this->userStorage->store($user);

@@ -2,6 +2,8 @@
 
 namespace App\Domain\Clients\TelegramWebApp\Http\Resources\User;
 
+use App\Domain\Clients\TelegramWebApp\Http\Resources\Balance\BalanceResource;
+use App\Models\BalanceAccount\BalanceAccount;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,6 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $name
  * @property string $telegram_id
  * @property string $login
+ * @property BalanceAccount $balance
  */
 class UsersResource extends JsonResource
 {
@@ -25,6 +28,7 @@ class UsersResource extends JsonResource
             'name' => $this->name,
             'telegram_id' => $this->telegram_id,
             'login' => $this->login,
+            'balance' => new BalanceResource($this->balance)
         ];
     }
 }

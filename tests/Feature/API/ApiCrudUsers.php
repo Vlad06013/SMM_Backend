@@ -49,4 +49,27 @@ class ApiCrudUsers extends TestCase
             ]);
     }
 
+    public function test_store(): void
+    {
+        $response = $this->postJson('/api/telegram-webapp/v1/user/',
+        [
+            "name" => "test",
+            "telegram_id" => "111",
+            "login" => "111",
+        ]);
+        $response->assertStatus(201)
+            ->assertJson([
+                'data' => [
+                    "id" => 1,
+                    "name" => "test",
+                    "telegram_id" => "111",
+                    "login" => "111",
+                    "balance" => [
+                        'id' => 1,
+                        'value' => 0,
+                    ],
+                ]
+            ]);
+    }
+
 }
