@@ -5,22 +5,25 @@ namespace Tests\Feature\Utils;
 use App\Domain\Services\Attachment\AttachmentService;
 use App\Domain\Services\ClientChannel\ClientChannelService;
 use App\Domain\Services\ClientChannel\DTO\CreateClientChannelDto;
+use App\Domain\Services\Post\DTO\CreatePostDto;
+use App\Domain\Services\Post\DTO\PostLinkDto;
+use App\Domain\Services\Post\PostService;
 use App\Domain\Services\User\DTO\CreateUserDto;
 use App\Domain\Services\User\UserService;
 use App\Models\Channels\ClientChannel;
 use App\Models\File\AttachmentFile;
+use App\Models\Post\Post;
 use App\Models\Post\PostingResource;
+use App\Models\User;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class Seeder extends TestCase
 {
-    public static function seedPostingResource(): PostingResource
+    public static function seedPostingResource(string $name = 'telegram'): PostingResource
     {
-        PostingResource::unguard();
-
         return PostingResource::create([
-            'id' => 1,
-            'name' => 'telegram'
+            'name' => $name
         ]);
 
     }
@@ -45,30 +48,70 @@ class Seeder extends TestCase
 
     }
 
-    public static function seedClientChannel(): ClientChannel
+    public static function seedClientChannel(
+        int    $user_id = 1,
+        int    $posting_resources_id = 1,
+        string $name = 'channelName',
+        bool   $auto_signature = false,
+        bool   $auto_punctuation = false,
+    ): ClientChannel
     {
         $clientChannelService = app(ClientChannelService::class);
         $clientChannelDto = new CreateClientChannelDto(
-            posting_resources_id: 1,
-            name: 'channelName',
-            auto_signature: true,
-            auto_punctuation: true,
+            user_id: $user_id,
+            posting_resources_id: $posting_resources_id,
+            name: $name,
+            auto_signature: $auto_signature,
+            auto_punctuation: $auto_punctuation,
         );
 
         return $clientChannelService->create($clientChannelDto);
     }
 
-    public static function seedUser(): array
+    public static function seedUser(string $name = 'test', string $telegram_id = '111', string $login = '111'): User
     {
         $userService = app(UserService::class);
 
         $userDto = new CreateUserDto(
-            name: 'test',
-            telegram_id: '111',
-            login: '111',
+            name: $name,
+            telegram_id: $telegram_id,
+            login: $login,
         );
-        $createdUser = $userService->create($userDto);
+        return $userService->create($userDto);
+    }
 
-        return compact('userDto', 'createdUser');
+    /**
+     * @param int $userID
+     * @param string $title
+     * @param string $text
+     * @param PostLinkDto[] $links
+     * @param Carbon[] $scheduleDates
+     * @param array $attachmentIds
+     * @param array $channelIds
+     * @return Post
+     */
+    public static function seedPost(
+        int    $userID = 1,
+        string $title = 'title',
+        string $text = 'text',
+        array  $links = [],
+        array  $scheduleDates = [],
+        array  $attachmentIds = [],
+        array  $channelIds = [],
+
+    ) : Post
+    {
+        $postService = app(PostService::class);
+
+        $postDto = new CreatePostDto(
+            creator_id: $userID,
+            title: $title,
+            text: $text,
+            links: $links,
+            scheduleDates: $scheduleDates,
+            attachmentIds: $attachmentIds,
+            channelIds: $channelIds
+        );
+        return $postService->create($postDto);
     }
 }

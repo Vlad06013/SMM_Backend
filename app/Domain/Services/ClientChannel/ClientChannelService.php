@@ -20,6 +20,7 @@ class ClientChannelService
     public function create(CreateClientChannelDto $createClientChannelDto): ClientChannel
     {
         $clientChannelModel = new ClientChannel();
+        $clientChannelModel->user_id = $createClientChannelDto->user_id;
         $clientChannelModel->posting_resources_id = $createClientChannelDto->posting_resources_id;
         $clientChannelModel->name = $createClientChannelDto->name;
         $clientChannelModel->auto_signature = $createClientChannelDto->auto_signature;

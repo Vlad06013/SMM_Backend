@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('client_channels', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->comment('Ид пользователя.');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->unsignedBigInteger('posting_resources_id')->comment('Ид ресурса.');
             $table->foreign('posting_resources_id')
                 ->references('id')
@@ -20,7 +26,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('name')->comment('Название канала.');
-            $table->mediumText('auto_signature')->comment('Текст авто-подписи.');
+            $table->boolean('auto_signature')->comment('Текст авто-подписи.');
             $table->boolean('auto_punctuation')->default('false')->comment('Авто-пунктуация.');
             $table->unsignedBigInteger('water_marks_id')->nullable()->comment('Водяные знаки.');
             $table->foreign('water_marks_id')
