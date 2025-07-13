@@ -10,7 +10,6 @@ class ApiClientChannelTest extends TestCase
 {
     use RefreshDatabase;
 
-
     public function test_index(): void
     {
         $resource = Seeder::seedPostingResource();
