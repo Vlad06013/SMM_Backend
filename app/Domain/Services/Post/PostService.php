@@ -3,6 +3,7 @@
 namespace App\Domain\Services\Post;
 
 use App\Domain\Services\Attachment\AttachmentService;
+use App\Domain\Services\ClientChannel\ClientChannelService;
 use App\Domain\Services\Link\LinkService;
 use App\Domain\Services\Post\DTO\CreatePostDto;
 use App\Domain\Services\PostSchedule\PostScheduleService;
@@ -17,6 +18,7 @@ class PostService
         protected LinkService $linkService,
         protected AttachmentService $attachmentService,
         protected PostScheduleService $postScheduleService,
+        protected ClientChannelService $clientChannelService,
     ){}
 
     /**
@@ -39,6 +41,7 @@ class PostService
        $this->linkService->syncToPost($post, $postDto->links);
        $this->attachmentService->syncToPost($post, $postDto->attachmentIds);
        $this->postScheduleService->syncToPost($post, $postDto->scheduleDates);
+       $this->clientChannelService->syncToPost($post, $postDto->channelIds);
 
        return $post;
     }

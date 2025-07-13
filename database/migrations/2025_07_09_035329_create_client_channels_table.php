@@ -22,13 +22,13 @@ return new class extends Migration
             $table->string('name')->comment('Название канала.');
             $table->mediumText('auto_signature')->comment('Текст авто-подписи.');
             $table->boolean('auto_punctuation')->default('false')->comment('Авто-пунктуация.');
-            $table->unsignedBigInteger('water_marks_id')->comment('Водяные знаки.');
+            $table->unsignedBigInteger('water_marks_id')->nullable()->comment('Водяные знаки.');
             $table->foreign('water_marks_id')
                 ->references('id')
                 ->on('water_marks')
                 ->onUpdate('cascade')
                 ->nullOnDelete();
-            $table->unsignedBigInteger('reposter_id')->comment('Водяные знаки.');
+            $table->unsignedBigInteger('reposter_id')->nullable()->comment('Водяные знаки.');
             $table->foreign('reposter_id')
                 ->references('id')
                 ->on('reposters')

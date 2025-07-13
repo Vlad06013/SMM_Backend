@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HasManySyncable extends HasMany
 {
-    public function sync($data, $deleting = true)
+    public function sync($data, $deleting = true): array
     {
         $changes = [
             'created' => [], 'deleted' => [], 'updated' => [],
@@ -79,7 +79,7 @@ class HasManySyncable extends HasMany
      * @param  array  $keys
      * @return array
      */
-    protected function castKeys(array $keys)
+    protected function castKeys(array $keys): array
     {
         return (array) array_map(function ($v) {
             return $this->castKey($v);
@@ -92,7 +92,7 @@ class HasManySyncable extends HasMany
      * @param  mixed  $key
      * @return mixed
      */
-    protected function castKey($key)
+    protected function castKey(mixed $key): mixed
     {
         return is_numeric($key) ? (int) $key : (string) $key;
     }

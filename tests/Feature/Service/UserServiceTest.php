@@ -2,9 +2,9 @@
 
 namespace Service;
 
-use App\Domain\Services\User\DTO\CreateUserDto;
 use App\Domain\Services\User\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
 class UserServiceTest extends TestCase
@@ -19,7 +19,7 @@ class UserServiceTest extends TestCase
      */
     public function test_create(): void
     {
-        ['createdUser' => $createdUser] =  $this->seedUser();
+        ['createdUser' => $createdUser] = Seeder::seedUser();
 
         $this->assertDatabaseHas('users',
             [
@@ -28,7 +28,7 @@ class UserServiceTest extends TestCase
                 'login' => '111',
             ]
         );
-        $this->assertDatabaseHas('balance_accounts', ['id' => $createdUser->balance_id,'value'=>0]);
+        $this->assertDatabaseHas('balance_accounts', ['id' => $createdUser->balance_id, 'value' => 0]);
     }
 
     /**
@@ -40,7 +40,7 @@ class UserServiceTest extends TestCase
     {
         $userService = app(UserService::class);
 
-        ['createdUser' => $createdUser] = $this->seedUser();
+        ['createdUser' => $createdUser] = Seeder::seedUser();
 
         $createdUser->name = 'updated_name';
         $createdUser->telegram_id = 'updated_telegram_id';
@@ -65,7 +65,7 @@ class UserServiceTest extends TestCase
     public function test_show(): void
     {
         $userService = app(UserService::class);
-        ['createdUser' => $createdUser] = $this->seedUser();
+        ['createdUser' => $createdUser] = Seeder::seedUser();
 
         $user = $userService->getById($createdUser->id);
         $userArray = $user->toArray();
@@ -89,7 +89,7 @@ class UserServiceTest extends TestCase
     public function test_index(): void
     {
         $userService = app(UserService::class);
-        ['userDto' => $userDto, 'createdUser' => $createdUser] = $this->seedUser();
+        ['userDto' => $userDto, 'createdUser' => $createdUser] = Seeder::seedUser();
 
         $users = $userService->index();
         foreach ($users as $user) {
@@ -114,7 +114,7 @@ class UserServiceTest extends TestCase
     public function test_delete(): void
     {
         $userService = app(UserService::class);
-        ['createdUser' => $createdUser] = $this->seedUser();
+        ['createdUser' => $createdUser] = Seeder::seedUser();
         $user = $userService->delete($createdUser->id);
 
         $this->assertDatabaseMissing('users', [
@@ -124,24 +124,5 @@ class UserServiceTest extends TestCase
             "login" => '111',
             'balance_id' => $createdUser->balance_id,
         ]);
-    }
-
-    /**
-     * Создание пользователя
-     *
-     * @return array
-     */
-    public function seedUser(): array
-    {
-        $userService = app(UserService::class);
-
-        $userDto = new CreateUserDto(
-            name: 'test',
-            telegram_id: '111',
-            login: '111',
-        );
-        $createdUser = $userService->create($userDto);
-
-        return compact('userDto', 'createdUser');
     }
 }

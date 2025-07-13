@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Domain\Services\Post\DTO\PostLinkDto;
 use App\Models\Post\Link;
 use App\Models\Post\Post;
-use Illuminate\Support\Collection;
 
 /**
  * @property string $model

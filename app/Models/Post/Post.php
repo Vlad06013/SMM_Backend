@@ -91,11 +91,11 @@ class Post extends Model
     /**
      * Каналы поста
      *
-     * @return BelongsToMany
+     * @return HasMany
      */
-    public function channels(): BelongsToMany
+    public function channels(): HasMany
     {
-        return $this->belongsToMany(PostChannel::class);
+        return $this->hasManySync(PostChannel::class);
     }
 
     /**
