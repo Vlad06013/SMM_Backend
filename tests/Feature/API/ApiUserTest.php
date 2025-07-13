@@ -6,21 +6,21 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
-class ApiCrudUsers extends TestCase
+class ApiUserTest extends TestCase
 {
     use RefreshDatabase;
 
 
     public function test_index(): void
     {
-        Seeder::seedUser();
+        $user = Seeder::seedUser();
         $response = $this->getJson('/api/telegram-webapp/v1/user');
         $response
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
                     [
-                        "id" => 1,
+                        "id" => $user->id,
                         "name" => "test",
                         "telegram_id" => "111",
                         "login" => "111",
@@ -31,18 +31,18 @@ class ApiCrudUsers extends TestCase
 
     public function test_show(): void
     {
-        Seeder::seedUser();
-        $response = $this->getJson('/api/telegram-webapp/v1/user/1');
+        $user = Seeder::seedUser();
+        $response = $this->getJson('/api/telegram-webapp/v1/user/'.$user->id);
         $response
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    "id" => 1,
+                    "id" => $user->id,
                     "name" => "test",
                     "telegram_id" => "111",
                     "login" => "111",
                     "balance" => [
-                        'id' => 1,
+                        'id' => $user->balance->id,
                         'value' => 0,
                     ],
                 ]
@@ -60,12 +60,12 @@ class ApiCrudUsers extends TestCase
         $response->assertStatus(201)
             ->assertJson([
                 'data' => [
-                    "id" => 1,
+                    "id" => $response->json()['data']['id'],
                     "name" => "test",
                     "telegram_id" => "111",
                     "login" => "111",
                     "balance" => [
-                        'id' => 1,
+                        'id' => $response->json()['data']['balance']['id'],
                         'value' => 0,
                     ],
                 ]
