@@ -20,7 +20,7 @@ class PostSchedule extends Model
         'send_actual_date',
     ];
     protected $casts  = [
-        'send_planed_date' => 'datetime',
-        'send_actual_date' => 'datetime',
+        'send_planed_date' => 'datetime:Y-m-d H:i',
+        'send_actual_date' => 'datetime:Y-m-d H:i',
     ];
 }

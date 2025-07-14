@@ -20,7 +20,7 @@ class ApiUserTest extends TestCase
             ->assertJson([
                 'data' => [
                     [
-                        "id" => $user->id,
+                        "id" => 1,
                         "name" => "test",
                         "telegram_id" => "111",
                         "login" => "111",
@@ -32,17 +32,17 @@ class ApiUserTest extends TestCase
     public function test_show(): void
     {
         $user = Seeder::seedUser();
-        $response = $this->getJson('/api/telegram-webapp/v1/user/' . $user->id);
+        $response = $this->getJson('/api/telegram-webapp/v1/user/1');
         $response
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    "id" => $user->id,
+                    "id" =>1,
                     "name" => "test",
                     "telegram_id" => "111",
                     "login" => "111",
                     "balance" => [
-                        'id' => $user->balance->id,
+                        'id' => 1,
                         'value' => 0,
                     ],
                 ]
@@ -60,12 +60,12 @@ class ApiUserTest extends TestCase
         $response->assertStatus(201)
             ->assertJson([
                 'data' => [
-                    "id" => $response->json()['data']['id'],
+                    "id" => 1,
                     "name" => "test",
                     "telegram_id" => "111",
                     "login" => "111",
                     "balance" => [
-                        'id' => $response->json()['data']['balance']['id'],
+                        'id' => 1,
                         'value' => 0,
                     ],
                 ]
@@ -76,7 +76,7 @@ class ApiUserTest extends TestCase
     {
         $user = Seeder::seedUser();
 
-        $response = $this->putJson('/api/telegram-webapp/v1/user/' . $user->id,
+        $response = $this->putJson('/api/telegram-webapp/v1/user/1',
             [
                 "name" => "test_update",
                 "telegram_id" => "111_update",
@@ -85,12 +85,12 @@ class ApiUserTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    "id" => $response->json()['data']['id'],
+                    "id" => 1,
                     "name" => "test_update",
                     "telegram_id" => "111_update",
                     "login" => "111_update",
                     "balance" => [
-                        'id' => $response->json()['data']['balance']['id'],
+                        'id' => 1,
                         'value' => 0,
                     ],
                 ]
@@ -100,17 +100,17 @@ class ApiUserTest extends TestCase
     public function test_delete(): void
     {
         $user = Seeder::seedUser();
-        $response = $this->deleteJson('/api/telegram-webapp/v1/user/' . $user->id);
+        $response = $this->deleteJson('/api/telegram-webapp/v1/user/1');
         $response
             ->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    "id" => $user->id,
+                    "id" => 1,
                     "name" => "test",
                     "telegram_id" => "111",
                     "login" => "111",
                     "balance" => [
-                        'id' => $user->balance->id,
+                        'id' => 1,
                         'value' => 0,
                     ],
                 ]

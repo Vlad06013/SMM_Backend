@@ -2,11 +2,13 @@
 
 namespace App\Domain\Clients\TelegramWebApp\Http\Controllers;
 
-use App\Domain\Clients\TelegramWebApp\Http\Requests\UserRequest;
+use App\Domain\Clients\TelegramWebApp\Http\Requests\ClientChannelRequest;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\ClientChannel\ClientChannelResource;
-use App\Domain\Clients\TelegramWebApp\Http\Resources\User\UserResource;
 use App\Domain\Clients\TelegramWebApp\UseCase\ClientChannel\ChannelsByUserId;
+use App\Domain\Clients\TelegramWebApp\UseCase\ClientChannel\DeleteClientChannel;
 use App\Domain\Clients\TelegramWebApp\UseCase\ClientChannel\ShowClientChannel;
+use App\Domain\Clients\TelegramWebApp\UseCase\ClientChannel\StoreClientChannel;
+use App\Domain\Services\ClientChannel\DTO\CreateClientChannelDto;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -27,15 +29,15 @@ class ClientChannelController extends Controller
     }
 
     /**
-     * @param UserRequest $request
-     * @return UserResource
+     * @param ClientChannelRequest $request
+     * @return ClientChannelResource
      */
-    public function store(UserRequest $request): UserResource
+    public function store(ClientChannelRequest $request): ClientChannelResource
     {
-//        $data = $request->validated();
-//
-//        $createUserDto = new CreateUserDto(...$data);
-//        return app(StoreUser::class)($createUserDto);
+        $data = $request->validated();
+        $createChanelDto = new CreateClientChannelDto(...$data);
+
+        return app(StoreClientChannel::class)($createChanelDto);
     }
 
     /**
@@ -48,25 +50,19 @@ class ClientChannelController extends Controller
     }
 
     /**
-     * @param UserRequest $request
+     * @param Request $request
      * @param string $id
-     * @return UserResource
      */
-    public function update(UserRequest $request, string $id): UserResource
+    public function update(Request $request, string $id)
     {
-//        $data = $request->validated();
-//        $data['id'] = $id;
-//        $updateDto = new UpdateUserDto(...$data);
-//
-//        return app(UpdateUser::class)($updateDto);
     }
 
     /**
      * @param string $id
-     * @return UserResource
+     * @return ClientChannelResource
      */
-    public function destroy(string $id): UserResource
+    public function destroy(string $id): ClientChannelResource
     {
-//        return app(DeleteUser::class)($id);
+        return app(DeleteClientChannel::class)($id);
     }
 }

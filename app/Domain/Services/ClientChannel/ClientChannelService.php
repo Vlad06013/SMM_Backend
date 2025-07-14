@@ -65,4 +65,15 @@ class ClientChannelService
     {
         return $this->clientChannelStorage->show($channelId);
     }
+
+    /**
+     * Удаление канала по Ид
+     *
+     * @param int $channelId
+     * @return ClientChannel|null
+     */
+    public function delete(int $channelId): ?ClientChannel
+    {
+        return $this->clientChannelStorage->destroy($channelId);
+    }
 }

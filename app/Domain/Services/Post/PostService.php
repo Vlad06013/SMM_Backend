@@ -10,6 +10,7 @@ use App\Domain\Services\PostSchedule\PostScheduleService;
 use App\Domain\Support\Enumerations\Post\PostStatusEnum;
 use App\Models\Post\Post;
 use App\Repository\PostStorage;
+use Illuminate\Support\Collection;
 
 class PostService
 {
@@ -31,7 +32,6 @@ class PostService
      */
     public function create(CreatePostDto $postDto): Post
     {
-
         $postModel = new Post();
         $postModel->creator_id = $postDto->creator_id;
         $postModel->title = $postDto->title;
@@ -46,5 +46,36 @@ class PostService
         $this->clientChannelService->syncToPost($post, $postDto->channelIds);
 
         return $post;
+    }
+
+    /**
+     * @param int $id
+     * @return Post|null
+     */
+    public function show(int $id): ?Post
+    {
+        return $this->postStorage->show($id);
+    }
+
+    /**
+     * Получение постов пользователя
+     *
+     * @param int $userId
+     * @return Collection<Post>|null
+     */
+    public function getByUserId(int $userId): ?Collection
+    {
+        return $this->postStorage->getByUserId($userId);
+    }
+
+    /**
+     * Удаление поста
+     *
+     * @param int $postId
+     * @return Post
+     */
+    public function delete(int $postId): Post
+    {
+        return $this->postStorage->destroy($postId);
     }
 }

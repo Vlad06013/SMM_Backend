@@ -19,10 +19,10 @@ class CreatePostDto
         public int $creator_id,
         public string $title,
         public string $text,
-        public array $links,
-        public array $scheduleDates,
-        public array $attachmentIds,
-        public array $channelIds,
+        public array $links = [],
+        public array $scheduleDates = [],
+        public array $attachmentIds = [],
+        public array $channelIds = [],
     )
     {
     }

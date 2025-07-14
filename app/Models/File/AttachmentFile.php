@@ -39,4 +39,9 @@ class AttachmentFile extends Model
         'user_id',
         'group',
     ];
+
+    public function url(): string
+    {
+        return $this->path;
+    }
 }

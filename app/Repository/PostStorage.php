@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Post\Post;
+use Illuminate\Support\Collection;
 
 /**
  * @property string $model
@@ -15,4 +16,16 @@ use App\Models\Post\Post;
 final class PostStorage extends CrudStorage
 {
     public static ?string $model =  Post::class;
+
+    /**
+     * Список постов пользователя
+     *
+     * @param int $userId
+     * @return Collection<Post>|null
+     */
+    public function getByUserId(int $userId): ?Collection
+    {
+        return app(self::$model)->where('creator_id', $userId)->get();
+    }
 }
+
