@@ -12,6 +12,8 @@ use App\Domain\Services\ClientChannel\DTO\CreateClientChannelDto;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ClientChannelController extends Controller
 {
@@ -62,9 +64,19 @@ class ClientChannelController extends Controller
      * @param string $user_id
      * @param string $id
      * @return ClientChannelResource
+     * @throws ValidationException
      */
     public function destroy(string $user_id, string $id): ClientChannelResource
     {
-        return app(DeleteClientChannel::class)($id);
+        $validator = Validator::make(
+            ['user_id' => $user_id, 'channel_id' => $id],
+            [
+                'user_id' => 'required|integer|exists:users,id',
+                'channel_id' => 'required|exists:client_channels,id'
+            ]
+        );
+        $data = $validator->validate();
+
+        return app(DeleteClientChannel::class)($data['channel_id']);
     }
 }

@@ -9,6 +9,8 @@ use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\StorePostLink;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostLinkController extends Controller
@@ -22,16 +24,22 @@ class PostLinkController extends Controller
      * @param Request $request
      * @param string $post_id
      * @return PostResource
+     * @throws ValidationException
      */
     public function store(Request $request, string $post_id): PostResource
     {
-        $data = $request->validate([
-            'links' => 'array',
-            'links.*.title' => 'required|string',
-            'links.*.url' => 'required|string',
-        ]);
+        $validator = Validator::make(
+            ['post_id' => $post_id, 'links' => $request->get('links')],
+            [
+                'post_id' => 'required|integer|exists:users,id',
+                'links' => 'array',
+                'links.*.title' => 'required|string',
+                'links.*.url' => 'required|string',
+            ]
+        );
+        $data = $validator->validate();
 
-        return app(StorePostLink::class)($post_id, $data['links']);
+        return app(StorePostLink::class)($data['post_id'], $data['links']);
     }
 
 
@@ -47,8 +55,20 @@ class PostLinkController extends Controller
     }
 
 
+    /**
+     * @throws ValidationException
+     */
     public function destroy(string $post_id, string $id)
     {
-        return app(DeletePostLink::class)($post_id, $id);
+        $validator = Validator::make(
+            ['post_id' => $post_id, 'link_id' => $id],
+            [
+                'post_id' => 'required|integer|exists:users,id',
+                'link_id' => 'required|integer|exists:links,id',
+            ]
+        );
+        $data = $validator->validate();
+
+        return app(DeletePostLink::class)($data['post_id'], $data['link_id']);
     }
 }

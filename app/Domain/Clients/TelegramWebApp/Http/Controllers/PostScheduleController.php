@@ -8,6 +8,8 @@ use App\Domain\Clients\TelegramWebApp\UseCase\PostSchedule\StorePostSchedule;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostScheduleController extends Controller
@@ -21,13 +23,19 @@ class PostScheduleController extends Controller
      * @param Request $request
      * @param string $post_id
      * @return PostResource
+     * @throws ValidationException
      */
     public function store(Request $request, string $post_id): PostResource
     {
-        $data = $request->validate([
-            'scheduleDates' => 'required|array',
-            'scheduleDates.*' => 'required|date',
-        ]);
+        $validator = Validator::make(
+            ['post_id' => $post_id, 'scheduleDates' => $request->get('scheduleDates')],
+            [
+                'post_id' => 'required|integer|exists:users,id',
+                'scheduleDates' => 'required|array',
+                'scheduleDates.*' => 'required|date',
+            ]
+        );
+        $data = $validator->validate();
 
         return app(StorePostSchedule::class)($post_id, $data['scheduleDates']);
     }
@@ -45,8 +53,20 @@ class PostScheduleController extends Controller
     }
 
 
+    /**
+     * @throws ValidationException
+     */
     public function destroy(string $post_id, string $id)
     {
-        return app(DeletePostSchedule::class)($post_id, $id);
+        $validator = Validator::make(
+            ['post_id' => $post_id, 'schedule_id' => $id],
+            [
+                'post_id' => 'required|integer|exists:users,id',
+                'schedule_id' => 'required|integer|exists:post_schedules,id',
+            ]
+        );
+        $data = $validator->validate();
+
+        return app(DeletePostSchedule::class)($data['post_id'], $data['schedule_id']);
     }
 }
