@@ -54,6 +54,7 @@ class ClientChannelController extends Controller
         $data['user_id'] = $validatedUser['user_id'];
 
         $createChanelDto = new CreateClientChannelDto(...$data);
+
         return app(StoreClientChannel::class)($createChanelDto);
     }
 
