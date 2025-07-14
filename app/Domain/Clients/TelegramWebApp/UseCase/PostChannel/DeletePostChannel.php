@@ -4,7 +4,7 @@ namespace App\Domain\Clients\TelegramWebApp\UseCase\PostChannel;
 
 use App\Domain\Clients\TelegramWebApp\Http\Resources\Post\PostResource;
 use App\Domain\Services\PostChannel\PostChannelService;
-use App\Models\Post\Post;
+use App\Repository\PostStorage;
 
 class DeletePostChannel
 {
@@ -15,6 +15,6 @@ class DeletePostChannel
     public function __invoke(int $postId, int $channelId): PostResource
     {
         $this->postChannelService->delete($postId, $channelId);
-        return new PostResource(Post::find($postId));
+        return new PostResource(app(PostStorage::class)->show($postId));
     }
 }

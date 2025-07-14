@@ -3,11 +3,9 @@
 namespace App\Models\Post;
 
 use App\Models\File\AttachmentFile;
-use App\Models\Relations\HasManySyncable;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
@@ -53,7 +51,7 @@ class Post extends Model
      */
     public function schedule(): HasMany
     {
-        return $this->hasManySync(PostSchedule::class);
+        return $this->hasMany(PostSchedule::class);
     }
 
     /**
@@ -63,7 +61,7 @@ class Post extends Model
      */
     public function links(): HasMany
     {
-        return $this->hasManySync(Link::class);
+        return $this->hasMany(Link::class);
     }
 
     /**
@@ -83,9 +81,9 @@ class Post extends Model
 //        );
 //    }
 
-    public function attachments()
+    public function attachments(): HasMany
     {
-        return $this->hasManySync(PostHasAttachment::class);
+        return $this->hasMany(PostHasAttachment::class);
     }
 
     /**
@@ -95,22 +93,6 @@ class Post extends Model
      */
     public function channels(): HasMany
     {
-        return $this->hasManySync(PostChannel::class);
-    }
-
-    /**
-     * Overrides the default Eloquent hasMany relationship to return a HasManySyncable.
-     */
-    public function hasManySync($related, $foreignKey = null, $localKey = null): HasManySyncable
-    {
-        $instance = $this->newRelatedInstance($related);
-
-        $foreignKey = $foreignKey ?: $this->getForeignKey();
-
-        $localKey = $localKey ?: $this->getKeyName();
-
-        return new HasManySyncable(
-            $instance->newQuery(), $this, $instance->getTable() . '.' . $foreignKey, $localKey
-        );
+        return $this->hasMany(PostChannel::class);
     }
 }

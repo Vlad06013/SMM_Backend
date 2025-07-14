@@ -2,8 +2,6 @@
 
 namespace App\Domain\Services\Link\DTO;
 
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 /**
 * @property int $post_id Ид поста

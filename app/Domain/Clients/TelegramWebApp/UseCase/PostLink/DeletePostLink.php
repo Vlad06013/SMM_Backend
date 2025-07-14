@@ -4,7 +4,6 @@ namespace App\Domain\Clients\TelegramWebApp\UseCase\PostLink;
 
 use App\Domain\Clients\TelegramWebApp\Http\Resources\Post\PostResource;
 use App\Domain\Services\Link\LinkService;
-use App\Domain\Services\PostSchedule\PostScheduleService;
 use App\Repository\PostStorage;
 
 class DeletePostLink

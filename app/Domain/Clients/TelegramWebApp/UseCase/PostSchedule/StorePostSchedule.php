@@ -3,10 +3,8 @@
 namespace App\Domain\Clients\TelegramWebApp\UseCase\PostSchedule;
 
 use App\Domain\Clients\TelegramWebApp\Http\Resources\Post\PostResource;
-use App\Domain\Services\PostChannel\PostChannelService;
 use App\Domain\Services\PostSchedule\PostScheduleService;
-use App\Models\Post\Post;
-use App\Models\Post\PostSchedule;
+use App\Repository\PostStorage;
 
 class StorePostSchedule
 {
@@ -18,6 +16,6 @@ class StorePostSchedule
     {
         $this->postScheduleService->create($postId, $dates);
 
-        return new PostResource(Post::find($postId));
+        return new PostResource(app(PostStorage::class)->show($postId));
     }
 }

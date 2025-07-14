@@ -2,9 +2,7 @@
 
 namespace App\Domain\Clients\TelegramWebApp\UseCase\Post;
 
-use App\Domain\Clients\TelegramWebApp\Http\Resources\ClientChannel\ClientChannelResource;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\Post\PostResource;
-use App\Domain\Services\ClientChannel\ClientChannelService;
 use App\Domain\Services\Post\PostService;
 
 class ShowPost

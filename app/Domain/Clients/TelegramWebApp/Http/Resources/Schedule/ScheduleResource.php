@@ -2,17 +2,9 @@
 
 namespace App\Domain\Clients\TelegramWebApp\Http\Resources\Schedule;
 
-use App\Domain\Clients\TelegramWebApp\Http\Resources\PostingResourceResource\PostingResourceResource;
-use App\Models\File\AttachmentFile;
-use App\Models\Post\Link;
-use App\Models\Post\PostChannel;
-use App\Models\Post\PostingResource;
-use App\Models\Post\PostSchedule;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @property integer $id Ид

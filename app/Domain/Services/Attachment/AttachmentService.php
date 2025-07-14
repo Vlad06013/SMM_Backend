@@ -12,10 +12,12 @@ class AttachmentService
     {
     }
 
-
+    /**
+     * @param AttachmentFile $model
+     * @return AttachmentFile
+     */
     public function create(AttachmentFile $model): AttachmentFile
     {
-
         return $this->attachmentStorage->store($model);
     }
 

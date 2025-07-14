@@ -4,10 +4,8 @@ namespace App\Domain\Clients\TelegramWebApp\Http\Controllers;
 
 use App\Domain\Clients\TelegramWebApp\Http\Requests\UpdatePostRequest;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\Post\PostResource;
-use App\Domain\Clients\TelegramWebApp\UseCase\PostChannel\DeletePostChannel;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\DeletePostLink;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\StorePostLink;
-use App\Domain\Clients\TelegramWebApp\UseCase\PostSchedule\StorePostSchedule;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
