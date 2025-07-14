@@ -31,7 +31,7 @@ class PostLinkController extends Controller
         $validator = Validator::make(
             ['post_id' => $post_id, 'links' => $request->get('links')],
             [
-                'post_id' => 'required|integer|exists:users,id',
+                'post_id' => 'required|integer|exists:posts,id',
                 'links' => 'array',
                 'links.*.title' => 'required|string',
                 'links.*.url' => 'required|string',
@@ -63,7 +63,7 @@ class PostLinkController extends Controller
         $validator = Validator::make(
             ['post_id' => $post_id, 'link_id' => $id],
             [
-                'post_id' => 'required|integer|exists:users,id',
+                'post_id' => 'required|integer|exists:posts,id',
                 'link_id' => 'required|integer|exists:links,id',
             ]
         );

@@ -30,7 +30,7 @@ class PostScheduleController extends Controller
         $validator = Validator::make(
             ['post_id' => $post_id, 'scheduleDates' => $request->get('scheduleDates')],
             [
-                'post_id' => 'required|integer|exists:users,id',
+                'post_id' => 'required|integer|exists:posts,id',
                 'scheduleDates' => 'required|array',
                 'scheduleDates.*' => 'required|date',
             ]
@@ -61,7 +61,7 @@ class PostScheduleController extends Controller
         $validator = Validator::make(
             ['post_id' => $post_id, 'schedule_id' => $id],
             [
-                'post_id' => 'required|integer|exists:users,id',
+                'post_id' => 'required|integer|exists:posts,id',
                 'schedule_id' => 'required|integer|exists:post_schedules,id',
             ]
         );

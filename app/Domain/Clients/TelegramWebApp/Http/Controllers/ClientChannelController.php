@@ -22,21 +22,36 @@ class ClientChannelController extends Controller
      * @param Request $request
      * @param string $user_id
      * @return AnonymousResourceCollection
+     * @throws ValidationException
      */
     public function index(Request $request, string $user_id): AnonymousResourceCollection
     {
-        return app(ChannelsByUserId::class)($user_id);
+        $validator = Validator::make(
+            ['user_id' => $user_id],
+            ['user_id' => 'required|integer|exists:users,id']
+        );
+        $data = $validator->validate();
+
+        return app(ChannelsByUserId::class)($data['user_id']);
     }
 
     /**
      * @param ClientChannelRequest $request
      * @param string $user_id
      * @return ClientChannelResource
+     * @throws ValidationException
      */
     public function store(ClientChannelRequest $request, string $user_id): ClientChannelResource
     {
         $data = $request->validated();
-        $data['user_id'] = $user_id;
+
+        $validator = Validator::make(
+            ['user_id' => $user_id],
+            ['user_id' => 'required|integer|exists:users,id']
+        );
+
+        $validatedUser = $validator->validate();
+        $data['user_id'] = $validatedUser['user_id'];
 
         $createChanelDto = new CreateClientChannelDto(...$data);
         return app(StoreClientChannel::class)($createChanelDto);
@@ -46,10 +61,20 @@ class ClientChannelController extends Controller
      * @param string $user_id
      * @param string $id
      * @return ClientChannelResource
+     * @throws ValidationException
      */
     public function show(string $user_id, string $id): ClientChannelResource
     {
-        return app(ShowClientChannel::class)($id);
+        $validator = Validator::make(
+            ['user_id' => $user_id, 'channel_id' => $id],
+            [
+                'user_id' => 'required|integer|exists:users,id',
+                'channel_id' => 'required|integer|exists:client_channels,id'
+            ]
+        );
+
+        $data = $validator->validate();
+        return app(ShowClientChannel::class)($data['channel_id']);
     }
 
     /**
