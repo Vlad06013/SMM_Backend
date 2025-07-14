@@ -135,7 +135,7 @@ class ApiPostTest extends TestCase
                 'data' => [
                     "id" => 1,
                     "creator" => [
-                        'id' => $user->id,
+                        'id' => 1,
                         'name' => 'test',
                         'telegram_id' => '111',
                         'login' => '111',
@@ -174,6 +174,93 @@ class ApiPostTest extends TestCase
             ]);
     }
 
+    public function test_update(): void
+    {
+        $resource = Seeder::seedPostingResource();
+        $user = Seeder::seedUser();
+        Seeder::seedClientChannel();
+        Seeder::seedClientChannel(name: 'channel2', id: 2);
+        $post = Seeder::seedPost(
+            links: [
+                ['title' => 'facebook', 'url' => 'https://facebook.com']
+            ],
+            scheduleDates: [Carbon::parse('2026-11-01 12:30')],
+            attachmentIds: [1],
+            channelIds: [1]
+        );
+        $response = $this->putJson('/api/telegram-webapp/v1/post/1',
+            [
+                "title" => 'title_updated',
+                "text" => 'text_updated',
+                "links" => [
+                    [
+                        'title' => 'facebook_updated',
+                        'url' => 'https://facebook.com_updated',
+                    ],
+                    [
+                        'title' => 'facebook2_updated',
+                        'url' => 'https://facebook2.com_updated',
+                    ]
+                ],
+                "scheduleDates" => [
+                    '2026-12-01 12:30',
+                    '2026-12-11 11:30',
+                ],
+                'channelIds' => [2],
+                'attachmentIds' => [1],
+            ]);
+        $response->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    "id" => 1,
+                    "creator" => [
+                        'id' => 1,
+                        'name' => 'test',
+                        'telegram_id' => '111',
+                        'login' => '111',
+                        'balance' => [
+                            'id' => 1,
+                            'value' => 0,
+                        ],
+                    ],
+                    "title" => "title_updated",
+                    "text" => "text_updated",
+                    "status" => "created",
+                    "schedule" => [
+                        [
+                            "id" => 1,
+                            "send_planed_date" => "2026-12-01 12:30:00",
+                        ],
+                        [
+                            "id" => 2,
+                            "send_planed_date" => "2026-12-11 11:30:00",
+                        ]
+                    ],
+                    'links' => [
+                        [
+                            'id' => 1,
+                            'title' => 'facebook_updated',
+                            'url' => 'https://facebook.com_updated',
+                        ],
+                        [
+                            'id' => 2,
+                            'title' => 'facebook2_updated',
+                            'url' => 'https://facebook2.com_updated',
+                        ]
+                    ],
+                    'channels' => [
+                        [
+                            'id' => 2,
+                            'name' => 'channel2',
+                            'resource' => [
+                                "id" => 1,
+                                'name' => 'telegram'
+                            ],
+                        ]
+                    ]
+                ]
+            ]);
+    }
 
     public function test_delete(): void
     {

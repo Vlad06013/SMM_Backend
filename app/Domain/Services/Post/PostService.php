@@ -6,6 +6,7 @@ use App\Domain\Services\Attachment\AttachmentService;
 use App\Domain\Services\ClientChannel\ClientChannelService;
 use App\Domain\Services\Link\LinkService;
 use App\Domain\Services\Post\DTO\CreatePostDto;
+use App\Domain\Services\Post\DTO\UpdatePostDto;
 use App\Domain\Services\PostSchedule\PostScheduleService;
 use App\Domain\Support\Enumerations\Post\PostStatusEnum;
 use App\Models\Post\Post;
@@ -77,5 +78,37 @@ class PostService
     public function delete(int $postId): Post
     {
         return $this->postStorage->destroy($postId);
+    }
+
+    /**
+     * Обновление поста
+     *
+     * @param UpdatePostDto $updatePostDto
+     * @return Post
+     */
+    public function update(UpdatePostDto $updatePostDto): Post
+    {
+        $postModel = $this->show($updatePostDto->id);
+        $postDtoArray = collect($updatePostDto)->filter(function ($value) {
+            return !is_null($value);
+        })->all();
+        unset($postDtoArray['links'], $postDtoArray['scheduleDates'], $postDtoArray['attachmentIds'], $postDtoArray['channelIds']);
+        $postModel->fill($postDtoArray);
+
+        $this->postStorage->update($postModel);
+
+        if ($updatePostDto->links)
+            $this->linkService->syncToPost($postModel, $updatePostDto->links);
+
+        if ($updatePostDto->attachmentIds)
+            $this->attachmentService->syncToPost($postModel, $updatePostDto->attachmentIds);
+
+        if ($updatePostDto->scheduleDates)
+            $this->postScheduleService->syncToPost($postModel, $updatePostDto->scheduleDates);
+
+        if ($updatePostDto->channelIds)
+            $this->clientChannelService->syncToPost($postModel, $updatePostDto->channelIds);
+
+        return $postModel;
     }
 }

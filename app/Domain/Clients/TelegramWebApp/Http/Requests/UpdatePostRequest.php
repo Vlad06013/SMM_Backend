@@ -4,7 +4,7 @@ namespace App\Domain\Clients\TelegramWebApp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,6 @@ class PostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'creator_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'text' => 'required|string',
             'links' => 'array',
@@ -34,7 +33,6 @@ class PostRequest extends FormRequest
             'attachmentIds.*' => 'nullable|exists:attachment_files,id',
             'channelIds' => 'nullable|array',
             'channelIds.*' => 'nullable|exists:client_channels,id',
-            'reposter_id' => 'nullable|exists:reposters,id',
         ];
     }
 }
