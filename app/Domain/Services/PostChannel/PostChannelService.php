@@ -28,7 +28,6 @@ class PostChannelService
         $postChannel->channel_id = $channelId;
 
         return $this->postChannelStorage->store($postChannel);
-
     }
 
     /**

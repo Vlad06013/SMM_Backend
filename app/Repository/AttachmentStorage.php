@@ -17,19 +17,4 @@ final class AttachmentStorage extends CrudStorage
 {
     public static ?string $model =  AttachmentFile::class;
 
-
-
-    /**
-     * Синхронизация вложений поста
-     *
-     * @param Post $post
-     * @param array $postAttachmentIds
-     * @return array
-     */
-    public function syncToPost(Post $post, array $postAttachmentIds): array
-    {
-        return $post->attachments()->sync(array_map(function ($postAttachmentId){
-            return ['attachment_id' =>$postAttachmentId];
-        }, $postAttachmentIds));
-    }
 }

@@ -33,18 +33,6 @@ class ClientChannelService
     }
 
     /**
-     * Синхронизация каналов поста
-     *
-     * @param Post $post
-     * @param array $postChannelIds
-     * @return array
-     */
-    public function syncToPost(Post $post, array $postChannelIds): array
-    {
-        return $this->clientChannelStorage->syncToPost($post, $postChannelIds);
-    }
-
-    /**
      * Получение каналов пользователя
      *
      * @param int $userId

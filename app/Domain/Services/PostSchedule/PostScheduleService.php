@@ -2,7 +2,6 @@
 
 namespace App\Domain\Services\PostSchedule;
 
-use App\Models\Post\Post;
 use App\Models\Post\PostSchedule;
 use App\Repository\PostScheduleStorage;
 use Carbon\Carbon;
@@ -36,18 +35,6 @@ class PostScheduleService
         }
 
         return $postSchedules;
-    }
-
-    /**
-     * Синхронизация расписания поста
-     *
-     * @param Post $post
-     * @param Carbon[] $dates
-     * @return array
-     */
-    public function syncToPost(Post $post, array $dates): array
-    {
-        return $this->postScheduleStorage->syncToPost($post, $dates);
     }
 
     /**
