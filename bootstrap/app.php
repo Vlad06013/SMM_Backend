@@ -27,4 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (NotFoundHttpException $e) {
            return response()->json(['error' => 'Not Found'], Response::HTTP_NOT_FOUND);
         });
+        $exceptions->render(function (RuntimeException $e) {
+            return response()->json(['error' => $e->getMessage()], Response::HTTP_FORBIDDEN);
+        });
     })->create();

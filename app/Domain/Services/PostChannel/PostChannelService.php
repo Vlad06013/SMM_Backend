@@ -20,6 +20,9 @@ class PostChannelService
      */
     public function create(int $postId, int $channelId): PostChannel
     {
+        if ($this->postChannelStorage->getByPostIdChannelID($postId, $channelId)) {
+            throw new \RuntimeException('Канал публикации уже назначен посту');
+        }
         $postChannel = new PostChannel();
         $postChannel->post_id = $postId;
         $postChannel->channel_id = $channelId;
