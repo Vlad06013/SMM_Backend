@@ -26,6 +26,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('status_send')->nullable()->comment('Статус отправки.');
+            $table->unique(['post_id', 'channel_id']);
             $table->timestamps();
             $table->comment('Каналы постов');
         });
