@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamps();
             $table->comment('Ресурсы для постинга');
         });
+
+        $this->seed();
     }
 
     /**
@@ -26,5 +28,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('posting_resources');
+    }
+
+    public function seed(){
+        \App\Models\Post\PostingResource::create([
+            'name'=>'telegram'
+        ]);
     }
 };

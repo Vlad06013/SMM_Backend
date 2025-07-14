@@ -16,17 +16,17 @@ class UpdatePost
 
     public function __invoke(array $updatePostData): PostResource
     {
-        if (isset($updatePostData['links'])) {
-            $updatePostData['links'] = array_map(function ($link) {
-                return new PostLinkDto(...$link);
-            }, $updatePostData['links']);
-        }
-
-        if (isset($updatePostData['scheduleDates'])) {
-            $updatePostData['scheduleDates'] = array_map(function ($date) {
-                return Carbon::parse($date);
-            }, $updatePostData['scheduleDates']);
-        }
+//        if (isset($updatePostData['links'])) {
+//            $updatePostData['links'] = array_map(function ($link) {
+//                return new PostLinkDto(...$link);
+//            }, $updatePostData['links']);
+//        }
+//
+//        if (isset($updatePostData['scheduleDates'])) {
+//            $updatePostData['scheduleDates'] = array_map(function ($date) {
+//                return Carbon::parse($date);
+//            }, $updatePostData['scheduleDates']);
+//        }
         $updatePostDto = new UpdatePostDto(...$updatePostData);
 
         return new PostResource($this->postService->update($updatePostDto));

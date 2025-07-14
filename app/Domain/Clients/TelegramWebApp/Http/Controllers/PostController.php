@@ -10,11 +10,7 @@ use App\Domain\Clients\TelegramWebApp\UseCase\Post\PostsByUserId;
 use App\Domain\Clients\TelegramWebApp\UseCase\Post\ShowPost;
 use App\Domain\Clients\TelegramWebApp\UseCase\Post\StorePost;
 use App\Domain\Clients\TelegramWebApp\UseCase\Post\UpdatePost;
-use App\Domain\Services\Post\DTO\CreatePostDto;
-use App\Domain\Services\Post\DTO\PostLinkDto;
-use App\Domain\Services\Post\DTO\UpdatePostDto;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -41,21 +37,7 @@ class PostController extends Controller
     {
         $data = $request->validated();
 
-        $createPostDto = new CreatePostDto(
-            $data['creator_id'],
-            $data['title'],
-            $data['text'],
-            $data['links'] ? array_map(function ($link) {
-                return new PostLinkDto(...$link);
-            }, $data['links']) : [],
-            $data['scheduleDates'] ? array_map(function ($date) {
-                return Carbon::parse($date);
-            }, $data['scheduleDates']) : [],
-            $data['attachmentIds'] ?? [],
-            $data['channelIds'] ?? [],
-        );
-
-        return app(StorePost::class)($createPostDto);
+        return app(StorePost::class)($data);
     }
 
     /**

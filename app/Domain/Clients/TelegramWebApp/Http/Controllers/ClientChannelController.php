@@ -18,33 +18,34 @@ class ClientChannelController extends Controller
 
     /**
      * @param Request $request
+     * @param string $user_id
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request, string $user_id): AnonymousResourceCollection
     {
-        $data = $request->validate([
-            'userId' => 'required|integer|exists:users,id',
-        ]);
-        return app(ChannelsByUserId::class)($data['userId']);
+        return app(ChannelsByUserId::class)($user_id);
     }
 
     /**
      * @param ClientChannelRequest $request
+     * @param string $user_id
      * @return ClientChannelResource
      */
-    public function store(ClientChannelRequest $request): ClientChannelResource
+    public function store(ClientChannelRequest $request, string $user_id): ClientChannelResource
     {
         $data = $request->validated();
-        $createChanelDto = new CreateClientChannelDto(...$data);
+        $data['user_id'] = $user_id;
 
+        $createChanelDto = new CreateClientChannelDto(...$data);
         return app(StoreClientChannel::class)($createChanelDto);
     }
 
     /**
+     * @param string $user_id
      * @param string $id
      * @return ClientChannelResource
      */
-    public function show(string $id): ClientChannelResource
+    public function show(string $user_id, string $id): ClientChannelResource
     {
         return app(ShowClientChannel::class)($id);
     }
@@ -58,10 +59,11 @@ class ClientChannelController extends Controller
     }
 
     /**
+     * @param string $user_id
      * @param string $id
      * @return ClientChannelResource
      */
-    public function destroy(string $id): ClientChannelResource
+    public function destroy(string $user_id, string $id): ClientChannelResource
     {
         return app(DeleteClientChannel::class)($id);
     }

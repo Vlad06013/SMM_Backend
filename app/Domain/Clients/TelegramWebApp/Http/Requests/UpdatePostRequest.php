@@ -24,15 +24,6 @@ class UpdatePostRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'text' => 'required|string',
-            'links' => 'array',
-            'links.*.title' => 'required|string',
-            'links.*.url' => 'required|string',
-            'scheduleDates' => 'required|array',
-            'scheduleDates.*' => 'required|date',
-            'attachmentIds' => 'nullable|array',
-            'attachmentIds.*' => 'nullable|exists:attachment_files,id',
-            'channelIds' => 'nullable|array',
-            'channelIds.*' => 'nullable|exists:client_channels,id',
         ];
     }
 }

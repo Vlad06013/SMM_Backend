@@ -6,16 +6,15 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
-class ApiClientChannelTest extends TestCase
+class ApiUsersChannelTest extends TestCase
 {
     use RefreshDatabase;
 
     public function test_index(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel();
-        $response = $this->getJson('/api/telegram-webapp/v1/client-channel?userId=1');
+        Seeder::seedUser();
+        Seeder::seedClientChannel();
+        $response = $this->getJson('/api/telegram-webapp/v1/user/1/channel');
         $response
             ->assertStatus(200)
             ->assertJson([
@@ -34,10 +33,9 @@ class ApiClientChannelTest extends TestCase
 
     public function test_show(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel();
-        $response = $this->getJson('/api/telegram-webapp/v1/client-channel/1');
+        Seeder::seedUser();
+        Seeder::seedClientChannel();
+        $response = $this->getJson('/api/telegram-webapp/v1/user/1/channel/1');
         $response
             ->assertStatus(200)
             ->assertJson([
@@ -58,9 +56,8 @@ class ApiClientChannelTest extends TestCase
 
     public function test_store(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $response = $this->postJson('/api/telegram-webapp/v1/client-channel',
+        Seeder::seedUser();
+        $response = $this->postJson('/api/telegram-webapp/v1/user/1/channel',
             [
                 "user_id" => 1,
                 "posting_resource_id" => 1,
@@ -88,10 +85,9 @@ class ApiClientChannelTest extends TestCase
 
     public function test_delete(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel();
-        $response = $this->deleteJson('/api/telegram-webapp/v1/client-channel/1');
+        Seeder::seedUser();
+        Seeder::seedClientChannel();
+        $response = $this->deleteJson('/api/telegram-webapp/v1/user/1/channel/1');
         $response
             ->assertStatus(200)
             ->assertJson([

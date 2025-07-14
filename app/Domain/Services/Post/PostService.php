@@ -41,10 +41,10 @@ class PostService
 
         $post = $this->postStorage->store($postModel);
 
-        $this->linkService->syncToPost($post, $postDto->links);
-        $this->attachmentService->syncToPost($post, $postDto->attachmentIds);
-        $this->postScheduleService->syncToPost($post, $postDto->scheduleDates);
-        $this->clientChannelService->syncToPost($post, $postDto->channelIds);
+//        $this->linkService->syncToPost($post, $postDto->links);
+//        $this->attachmentService->syncToPost($post, $postDto->attachmentIds);
+//        $this->postScheduleService->syncToPost($post, $postDto->scheduleDates);
+//        $this->clientChannelService->syncToPost($post, $postDto->channelIds);
 
         return $post;
     }
@@ -89,26 +89,33 @@ class PostService
     public function update(UpdatePostDto $updatePostDto): Post
     {
         $postModel = $this->show($updatePostDto->id);
+
         $postDtoArray = collect($updatePostDto)->filter(function ($value) {
             return !is_null($value);
         })->all();
-        unset($postDtoArray['links'], $postDtoArray['scheduleDates'], $postDtoArray['attachmentIds'], $postDtoArray['channelIds']);
-        $postModel->fill($postDtoArray);
 
+//        unset(
+//            $postDtoArray['links'],
+//            $postDtoArray['scheduleDates'],
+//            $postDtoArray['attachmentIds'],
+//            $postDtoArray['channelIds']
+//        );
+
+        $postModel->fill($postDtoArray);
         $this->postStorage->update($postModel);
 
-        if ($updatePostDto->links)
-            $this->linkService->syncToPost($postModel, $updatePostDto->links);
+//        if ($updatePostDto->links)
+//            $this->linkService->syncToPost($postModel, $updatePostDto->links);
+//
+//        if ($updatePostDto->attachmentIds)
+//            $this->attachmentService->syncToPost($postModel, $updatePostDto->attachmentIds);
+//
+//        if ($updatePostDto->scheduleDates)
+//            $this->postScheduleService->syncToPost($postModel, $updatePostDto->scheduleDates);
+//
+//        if ($updatePostDto->channelIds)
+//            $this->clientChannelService->syncToPost($postModel, $updatePostDto->channelIds);
 
-        if ($updatePostDto->attachmentIds)
-            $this->attachmentService->syncToPost($postModel, $updatePostDto->attachmentIds);
-
-        if ($updatePostDto->scheduleDates)
-            $this->postScheduleService->syncToPost($postModel, $updatePostDto->scheduleDates);
-
-        if ($updatePostDto->channelIds)
-            $this->clientChannelService->syncToPost($postModel, $updatePostDto->channelIds);
-
-        return $postModel;
+        return $postModel->fresh();
     }
 }

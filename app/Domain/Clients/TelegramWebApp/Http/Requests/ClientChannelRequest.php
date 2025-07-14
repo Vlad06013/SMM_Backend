@@ -22,7 +22,6 @@ class ClientChannelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
             'posting_resource_id' => 'required|exists:posting_resources,id',
             'name' => 'required|string',
             'auto_signature' => 'required|boolean',

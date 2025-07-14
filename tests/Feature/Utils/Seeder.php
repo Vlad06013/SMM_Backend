@@ -12,6 +12,7 @@ use App\Models\Post\PostHasAttachment;
 use App\Models\Post\PostingResource;
 use App\Models\Post\PostSchedule;
 use App\Models\User;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class Seeder extends TestCase
@@ -99,47 +100,23 @@ class Seeder extends TestCase
         int    $userID = 1,
         string $title = 'title',
         string $text = 'text',
-        array  $links = [],
-        array  $scheduleDates = [],
-        array  $attachmentIds = [],
-        array  $channelIds = [],
         int    $postId = 1,
 
     ): Post
     {
         Post::unguard();
-        $post = Post::create([
+        return Post::create([
             'id' => $postId,
             'creator_id' => $userID,
             'title' => $title,
             'text' => $text,
         ]);
-        foreach ($links as $link) {
-          self::seedLink($post->id, $link['url'], $link['title']);
-        }
-        foreach ($scheduleDates as $scheduleDate) {
-           self::seedScheduleDates($post->id, $scheduleDate);
-        }
 
-        foreach ($channelIds as $channelId) {
-            self::seedPostChannels($post->id, $channelId);
-        }
-
-        foreach ($attachmentIds as $attachmentId) {
-            $attachmentCreated = self::seedAttachment(id:$attachmentId);
-
-            PostHasAttachment::create([
-                'post_id' => $postId,
-                'attachment_id' => $attachmentCreated->id,
-            ]);
-        }
-
-        return $post;
     }
 
-    public static function seedPostChannels(string $postId, int $channelId, int $id = 1)
+    public static function seedPostChannels(int $postId = 1, int $channelId = 1, int $id = 1)
     {
-        PostSchedule::unguard();
+        PostChannel::unguard();
 
         return PostChannel::create([
             'id' => $id,
@@ -148,18 +125,18 @@ class Seeder extends TestCase
         ]);
     }
 
-    public static function seedScheduleDates(string $postId, string $date, int $id = 1)
+    public static function seedScheduleDates(int $postId = 1, string $date = '2027-01-01', int $id = 1)
     {
         PostSchedule::unguard();
 
         return PostSchedule::create([
             'id' => $id,
             'post_id' => $postId,
-            'send_planed_date' => $date,
+            'send_planed_date' => Carbon::parse($date),
         ]);
     }
 
-    public static function seedLink(string $postId, string $url, string $title, int $id = 1)
+    public static function seedLink(int $postId = 1, string $url = 'https://link.com', string $title = 'link', int $id = 1)
     {
         Link::unguard();
 
@@ -168,6 +145,28 @@ class Seeder extends TestCase
             'post_id' => $postId,
             'url' => $url,
             'title' => $title,
+        ]);
+    }
+
+    public static function seedPostChannel(int $postId = 1, int $channelId = 1, int $id = 1)
+    {
+        PostChannel::unguard();
+
+        return PostChannel::create([
+            'id' => $id,
+            'post_id' => $postId,
+            'channel_id' => $channelId,
+        ]);
+    }
+
+    public static function seedPostAttachment(int $postId = 1, int $attachmentId = 1, int $id = 1)
+    {
+        PostHasAttachment::unguard();
+
+        return PostHasAttachment::create([
+            'id' => $id,
+            'post_id' => $postId,
+            'attachment_id' => $attachmentId,
         ]);
     }
 }

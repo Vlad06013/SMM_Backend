@@ -2,7 +2,6 @@
 
 namespace API;
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
@@ -13,10 +12,10 @@ class ApiPostTest extends TestCase
 
     public function test_index(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel();
-        $post = Seeder::seedPost(scheduleDates: [Carbon::parse('2026-11-01 12:30')]);
+        Seeder::seedUser();
+        Seeder::seedClientChannel();
+        Seeder::seedPost();
+        Seeder::seedScheduleDates();
         $response = $this->getJson('/api/telegram-webapp/v1/post?userId=1');
         $response
             ->assertStatus(200)
@@ -31,7 +30,7 @@ class ApiPostTest extends TestCase
                         "schedule" => [
                             [
                                 "id" => 1,
-                                "send_planed_date" => "2026-11-01 12:30:00",
+                                "send_planed_date" => "2027-01-01 00:00:00",
                             ]
                         ],
                     ]
@@ -41,17 +40,14 @@ class ApiPostTest extends TestCase
 
     public function test_show(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel();
-        $post = Seeder::seedPost(
-            links: [
-                ['title' => 'facebook', 'url' => 'https://facebook.com']
-        ],
-            scheduleDates: [Carbon::parse('2026-11-01 12:30')],
-            attachmentIds: [1],
-            channelIds: [1]
-        );
+        Seeder::seedUser();
+        Seeder::seedPost();
+        Seeder::seedClientChannel();
+        Seeder::seedPostChannels();
+        Seeder::seedAttachment();
+        Seeder::seedPostAttachment();
+        Seeder::seedScheduleDates();
+        Seeder::seedLink();
         $response = $this->getJson('/api/telegram-webapp/v1/post/1');
         $response
             ->assertStatus(200)
@@ -74,14 +70,14 @@ class ApiPostTest extends TestCase
                     "schedule" => [
                         [
                             "id" => 1,
-                            "send_planed_date" => "2026-11-01 12:30:00",
+                            "send_planed_date" => "2027-01-01 00:00:00",
                         ]
                     ],
                     'links' => [
                         [
                             'id' => 1,
-                            'title' => 'facebook',
-                            'url' => 'https://facebook.com',
+                            'title' => 'link',
+                            'url' => 'https://link.com',
                         ]
                     ],
                     'channels' => [
@@ -107,28 +103,13 @@ class ApiPostTest extends TestCase
 
     public function test_store(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel();
-        Seeder::seedAttachment();
+        Seeder::seedUser();
 
         $response = $this->postJson('/api/telegram-webapp/v1/post',
             [
                 "creator_id" => 1,
                 "title" => 'title',
                 "text" => 'text',
-                "links" => [
-                    [
-                        'title' => 'facebook',
-                        'url' => 'https://facebook.com',
-                    ]
-                ],
-                "scheduleDates" => [
-                    '2026-11-01 12:30',
-                    '2026-10-11 12:30',
-                ],
-                'channelIds' => [1],
-                'attachmentIds' => [1],
             ]);
         $response->assertStatus(201)
             ->assertJson([
@@ -147,67 +128,22 @@ class ApiPostTest extends TestCase
                     "title" => "title",
                     "text" => "text",
                     "status" => "created",
-                    "schedule" => [
-                        [
-                            "id" => 1,
-                            "send_planed_date" => "2026-11-01 12:30:00",
-                        ]
-                    ],
-                    'links' => [
-                        [
-                            'id' => 1,
-                            'title' => 'facebook',
-                            'url' => 'https://facebook.com',
-                        ]
-                    ],
-                    'channels' => [
-                        [
-                            'id' => 1,
-                            'name' => 'channelName',
-                            'resource' => [
-                                "id" => 1,
-                                'name' => 'telegram'
-                            ],
-                        ]
-                    ]
+                    "schedule" => [],
+                    'links' => [],
+                    'channels' => []
                 ]
             ]);
     }
 
     public function test_update(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        Seeder::seedClientChannel();
-        Seeder::seedClientChannel(name: 'channel2', id: 2);
-        $post = Seeder::seedPost(
-            links: [
-                ['title' => 'facebook', 'url' => 'https://facebook.com']
-            ],
-            scheduleDates: [Carbon::parse('2026-11-01 12:30')],
-            attachmentIds: [1],
-            channelIds: [1]
-        );
+        Seeder::seedUser();
+        Seeder::seedPost();
+
         $response = $this->putJson('/api/telegram-webapp/v1/post/1',
             [
                 "title" => 'title_updated',
                 "text" => 'text_updated',
-                "links" => [
-                    [
-                        'title' => 'facebook_updated',
-                        'url' => 'https://facebook.com_updated',
-                    ],
-                    [
-                        'title' => 'facebook2_updated',
-                        'url' => 'https://facebook2.com_updated',
-                    ]
-                ],
-                "scheduleDates" => [
-                    '2026-12-01 12:30',
-                    '2026-12-11 11:30',
-                ],
-                'channelIds' => [2],
-                'attachmentIds' => [1],
             ]);
         $response->assertStatus(200)
             ->assertJson([
@@ -226,54 +162,18 @@ class ApiPostTest extends TestCase
                     "title" => "title_updated",
                     "text" => "text_updated",
                     "status" => "created",
-                    "schedule" => [
-                        [
-                            "id" => 1,
-                            "send_planed_date" => "2026-12-01 12:30:00",
-                        ],
-                        [
-                            "id" => 2,
-                            "send_planed_date" => "2026-12-11 11:30:00",
-                        ]
-                    ],
-                    'links' => [
-                        [
-                            'id' => 1,
-                            'title' => 'facebook_updated',
-                            'url' => 'https://facebook.com_updated',
-                        ],
-                        [
-                            'id' => 2,
-                            'title' => 'facebook2_updated',
-                            'url' => 'https://facebook2.com_updated',
-                        ]
-                    ],
-                    'channels' => [
-                        [
-                            'id' => 2,
-                            'name' => 'channel2',
-                            'resource' => [
-                                "id" => 1,
-                                'name' => 'telegram'
-                            ],
-                        ]
-                    ]
+                    "schedule" => [],
+                    'links' => [],
+                    'channels' => []
                 ]
             ]);
     }
 
     public function test_delete(): void
     {
-        $resource = Seeder::seedPostingResource();
-        $user = Seeder::seedUser();
-        $channel = Seeder::seedClientChannel();
-        $post = Seeder::seedPost(
-            links:[
-                ['title' => 'facebook', 'url' => 'https://facebook.com']
-            ],
-            scheduleDates: [Carbon::parse('2026-11-01 12:30')],
-            channelIds: [1]
-        );
+        Seeder::seedUser();
+        Seeder::seedClientChannel();
+        Seeder::seedPost();
         $response = $this->deleteJson('/api/telegram-webapp/v1/post/1');
         $response
             ->assertStatus(200)

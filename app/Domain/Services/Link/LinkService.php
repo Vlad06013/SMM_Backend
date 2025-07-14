@@ -2,10 +2,9 @@
 
 namespace App\Domain\Services\Link;
 
-use App\Domain\Services\Post\DTO\PostLinkDto;
-use App\Models\Post\Post;
+use App\Domain\Services\Link\DTO\CreateLinkDTO;
+use App\Models\Post\Link;
 use App\Repository\LinkStorage;
-use Illuminate\Support\Str;
 
 class LinkService
 {
@@ -13,20 +12,31 @@ class LinkService
     {
     }
 
-    /**
-     * Синхронизация ссылок поста
-     *
-     * @param Post $post
-     * @param PostLinkDto[] $postLinkDto
-     * @return array
-     */
-    public function syncToPost(Post $post, array $postLinkDto): array
-    {
-        foreach ($postLinkDto as $linkDto) {
-            if (!Str::isUrl($linkDto->url))
-                throw new \DomainException('"'. $linkDto->url. '" Не является URL');
-        }
 
-        return $this->linkStorage->syncToPost($post, $postLinkDto);
+    /**
+     * Удаление ссылки поста
+     *
+     * @param int $linkId
+     * @return Link
+     */
+    public function delete(int $linkId): Link
+    {
+        return $this->linkStorage->destroy($linkId);
+    }
+
+    /**
+     * Создание ссылки поста
+     *
+     * @param CreateLinkDTO $linkDto
+     * @return Link
+     */
+    public function create(CreateLinkDTO $linkDto): Link
+    {
+        $linkModel = new Link();
+        $linkModel->post_id = $linkDto->post_id;
+        $linkModel->title = $linkDto->title;
+        $linkModel->url = $linkDto->url;
+
+        return $this->linkStorage->store($linkModel);
     }
 }
