@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
-class ApiPostLinkTest extends TestCase
+class PostLinkTest extends TestCase
 {
     use RefreshDatabase;
 

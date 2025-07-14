@@ -6,18 +6,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
-class ApiPostChannelsTest extends TestCase
+class PostScheduleTest extends TestCase
 {
     use RefreshDatabase;
 
     public function test_store(): void
     {
         Seeder::seedUser();
-        Seeder::seedClientChannel();
         Seeder::seedPost();
-        $response = $this->postJson('/api/telegram-webapp/v1/post/1/channels',
+        $response = $this->postJson('/api/telegram-webapp/v1/post/1/schedule',
             [
-                "channel_id" => 1,
+                "scheduleDates" => [
+                    "2025-01-01 15:30",
+                    "2025-01-02 15:30",
+                ],
             ]);
         $response->assertStatus(200)
             ->assertJson([
@@ -36,18 +38,18 @@ class ApiPostChannelsTest extends TestCase
                     "title" => "title",
                     "text" => "text",
                     "status" => "created",
-                    "schedule" => [],
-                    'links' => [],
-                    'channels' => [
+                    "schedule" => [
                         [
                             'id' => 1,
-                            'name' => 'channelName',
-                            'resource' => [
-                                "id" => 1,
-                                'name' => 'telegram'
-                            ],
+                            'send_planed_date' => '2025-01-01 15:30:00',
+                        ],
+                        [
+                            'id' => 2,
+                            'send_planed_date' => '2025-01-02 15:30:00',
                         ]
-                    ]
+                    ],
+                    'links' => [],
+                    'channels' => []
                 ]
             ]);
     }

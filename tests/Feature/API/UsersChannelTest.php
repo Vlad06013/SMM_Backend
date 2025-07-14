@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
-class ApiUsersChannelTest extends TestCase
+class UsersChannelTest extends TestCase
 {
     use RefreshDatabase;
 
