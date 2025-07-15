@@ -7,19 +7,12 @@ use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\DeletePostLink;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\StorePostLink;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\UpdatePostLink;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response;
 
 class PostLinkController extends Controller
 {
-    public function index(Request $request): JsonResponse
-    {
-        return response()->json('Method not allowed', Response::HTTP_METHOD_NOT_ALLOWED);
-    }
-
     /**
      * @param Request $request
      * @param string $post_id
