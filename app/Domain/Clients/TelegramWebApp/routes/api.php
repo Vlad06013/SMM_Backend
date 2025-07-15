@@ -9,9 +9,9 @@ use App\Domain\Clients\TelegramWebApp\Http\Controllers\PostScheduleController;
 use App\Domain\Clients\TelegramWebApp\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('user', UserController::class)->except(['index']);
+Route::apiResource('user', UserController::class)
+    ->except(['index'])->middlewareFor(['show', 'update', 'destroy'],'auth:web-app');
 Route::apiResource('user/{user_id}/channel', ClientChannelController::class);
-
 Route::apiResource('post', PostController::class);
 Route::apiResource('post/{id}/channels', PostChannelController::class)->only(['store','destroy']);
 Route::apiResource('post/{id}/schedule', PostScheduleController::class)->only(['store', 'update', 'destroy']);

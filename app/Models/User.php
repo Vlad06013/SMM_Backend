@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\BalanceAccount\BalanceAccount;
+use App\Policies\UserPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -14,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $balance_id Ид баланса
  * @property BalanceAccount $balance Баланс
  */
+//#[UsePolicy(UserPolicy::class)]
 class User extends Authenticatable
 {
     protected $fillable = [

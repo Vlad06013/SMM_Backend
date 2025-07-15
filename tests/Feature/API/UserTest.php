@@ -13,7 +13,7 @@ class UserTest extends TestCase
     public function test_show(): void
     {
         Seeder::seedUser();
-        $response = $this->getJson('/api/telegram-webapp/v1/user/1');
+        $response = $this->getJson('/api/telegram-webapp/v1/user/1',['auth-telegram-id' => 111]);
         $response
             ->assertStatus(200)
             ->assertJson([
@@ -60,16 +60,16 @@ class UserTest extends TestCase
         $response = $this->putJson('/api/telegram-webapp/v1/user/1',
             [
                 "name" => "test_update",
-                "telegram_id" => "111_update",
-                "login" => "111_update",
-            ]);
+            ],
+            ['auth-telegram-id' => 111]
+        );
         $response->assertStatus(200)
             ->assertJson([
                 'data' => [
                     "id" => 1,
                     "name" => "test_update",
-                    "telegram_id" => "111_update",
-                    "login" => "111_update",
+                    "telegram_id" => "111",
+                    "login" => "111",
                     "balance" => [
                         'id' => 1,
                         'value' => 0,
@@ -81,7 +81,7 @@ class UserTest extends TestCase
     public function test_delete(): void
     {
         Seeder::seedUser();
-        $response = $this->deleteJson('/api/telegram-webapp/v1/user/1');
+        $response = $this->deleteJson('/api/telegram-webapp/v1/user/1',[],['auth-telegram-id' => 111]);
         $response
             ->assertStatus(200)
             ->assertJson([

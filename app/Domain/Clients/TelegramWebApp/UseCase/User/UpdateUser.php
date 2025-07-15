@@ -5,6 +5,7 @@ namespace App\Domain\Clients\TelegramWebApp\UseCase\User;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\User\UserResource;
 use App\Domain\Services\User\DTO\UserDto;
 use App\Domain\Services\User\UserService;
+use App\Models\User;
 
 class UpdateUser
 {
@@ -12,11 +13,11 @@ class UpdateUser
     {
     }
 
-    public function __invoke(int $user_id, array $data): UserResource
+    public function __invoke(User $user, array $data): UserResource
     {
         $updateDto = new UserDto(...$data);
-        $this->userService->update($user_id, $updateDto);
+        $this->userService->update($user->id, $updateDto);
 
-        return new UserResource($this->userService->getById($user_id));
+        return new UserResource($user->fresh());
     }
 }
