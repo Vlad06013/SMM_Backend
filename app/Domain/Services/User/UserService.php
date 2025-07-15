@@ -7,7 +7,6 @@ use App\Domain\Services\User\DTO\CreateUserDto;
 use App\Domain\Services\User\DTO\UpdateUserDto;
 use App\Models\User;
 use App\Repository\UserStorage;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class UserService
@@ -21,18 +20,20 @@ class UserService
 
     /**
      * Создание пользователя с нулевым балансом
+     *
      * @param CreateUserDto $dto
-     * @return User
+     * @return User|null
      */
-    public function create(CreateUserDto $dto): User
+    public function create(CreateUserDto $dto): ?User
     {
         $userCreated = null;
+
         DB::transaction(function () use ($dto, &$userCreated) {
+
             $balanceAccount = $this->balanceAccountService->create();
+
             $user = new User((array)$dto);
-
             $user->balance_id = $balanceAccount->id;
-
             $userCreated = $this->userStorage->store($user);
         });
 
@@ -80,11 +81,4 @@ class UserService
         return $this->userStorage->destroy($id);
     }
 
-    /**
-     * @return Collection<User>|null
-     */
-    public function index(): ?Collection
-    {
-        return $this->userStorage->index();
-    }
 }

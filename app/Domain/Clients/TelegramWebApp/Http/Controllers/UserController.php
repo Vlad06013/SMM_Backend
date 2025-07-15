@@ -5,25 +5,15 @@ namespace App\Domain\Clients\TelegramWebApp\Http\Controllers;
 use App\Domain\Clients\TelegramWebApp\Http\Requests\UserRequest;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\User\UserResource;
 use App\Domain\Clients\TelegramWebApp\UseCase\User\DeleteUser;
-use App\Domain\Clients\TelegramWebApp\UseCase\User\IndexUser;
 use App\Domain\Clients\TelegramWebApp\UseCase\User\ShowUser;
 use App\Domain\Clients\TelegramWebApp\UseCase\User\StoreUser;
 use App\Domain\Clients\TelegramWebApp\UseCase\User\UpdateUser;
 use App\Domain\Services\User\DTO\CreateUserDto;
 use App\Domain\Services\User\DTO\UpdateUserDto;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
-
-    /**
-     * @return AnonymousResourceCollection
-     */
-    public function index(): AnonymousResourceCollection
-    {
-        return app(IndexUser::class)();
-    }
 
     /**
      * @param UserRequest $request

@@ -9,7 +9,7 @@ use App\Domain\Clients\TelegramWebApp\Http\Controllers\PostScheduleController;
 use App\Domain\Clients\TelegramWebApp\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('user', UserController::class);
+Route::apiResource('user', UserController::class)->except(['index']);
 Route::apiResource('user/{user_id}/channel', ClientChannelController::class);
 
 Route::apiResource('post', PostController::class);

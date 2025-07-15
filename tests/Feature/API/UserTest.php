@@ -10,25 +10,6 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-
-    public function test_index(): void
-    {
-        Seeder::seedUser();
-        $response = $this->getJson('/api/telegram-webapp/v1/user');
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'data' => [
-                    [
-                        "id" => 1,
-                        "name" => "test",
-                        "telegram_id" => "111",
-                        "login" => "111",
-                    ]
-                ]
-            ]);
-    }
-
     public function test_show(): void
     {
         Seeder::seedUser();
