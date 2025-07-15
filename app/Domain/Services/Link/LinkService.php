@@ -38,4 +38,21 @@ class LinkService
 
         return $this->linkStorage->store($linkModel);
     }
+
+    /**
+     * Обновление ссылки
+     *
+     * @param int $linkId
+     * @param string $title
+     * @param string $url
+     * @return bool
+     */
+    public function update(int $linkId, string $title, string $url): bool
+    {
+        $linkModel = $this->linkStorage->show($linkId);
+        $linkModel->title = $title;
+        $linkModel->url = $url;
+
+        return $this->linkStorage->update($linkModel);
+    }
 }

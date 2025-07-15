@@ -62,6 +62,49 @@ class PostLinkTest extends TestCase
             ]);
     }
 
+    public function test_update(): void
+    {
+        Seeder::seedUser();
+        Seeder::seedClientChannel();
+        Seeder::seedPost();
+        Seeder::seedLink();
+
+        $response = $this->putJson('/api/telegram-webapp/v1/post/1/link/1',
+            [
+                "link" => [
+                    "title" => 'newTitle',
+                    "url" => 'https://new-example.com/test',
+                ]
+            ]);
+        $response->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    "id" => 1,
+                    "creator" => [
+                        'id' => 1,
+                        'name' => 'test',
+                        'telegram_id' => '111',
+                        'login' => '111',
+                        'balance' => [
+                            'id' => 1,
+                            'value' => 0,
+                        ],
+                    ],
+                    "title" => "title",
+                    "text" => "text",
+                    "status" => "created",
+                    "schedule" => [],
+                    'links' => [
+                        [
+                            'id' => 1,
+                            "title" => 'newTitle',
+                            "url" => 'https://new-example.com/test',
+                        ]
+                    ],
+                    'channels' => []
+                ]
+            ]);
+    }
     public function test_delete(): void
     {
         Seeder::seedUser();

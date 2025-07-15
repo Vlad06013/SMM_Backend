@@ -15,5 +15,5 @@ Route::apiResource('user/{user_id}/channel', ClientChannelController::class);
 Route::apiResource('post', PostController::class);
 Route::apiResource('post/{id}/channels', PostChannelController::class)->only(['store','destroy']);
 Route::apiResource('post/{id}/schedule', PostScheduleController::class)->only(['store', 'update', 'destroy']);
-Route::apiResource('post/{id}/link', PostLinkController::class)->only(['store', 'destroy']);
+Route::apiResource('post/{id}/link', PostLinkController::class)->only(['store', 'update', 'destroy']);
 
