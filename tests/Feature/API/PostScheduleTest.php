@@ -2,8 +2,8 @@
 
 namespace API;
 
+use Database\Seeders\Utils\Seeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
 class PostScheduleTest extends TestCase
@@ -46,6 +46,45 @@ class PostScheduleTest extends TestCase
                         [
                             'id' => 2,
                             'send_planed_date' => '2025-01-02 15:30:00',
+                        ]
+                    ],
+                    'links' => [],
+                    'channels' => []
+                ]
+            ]);
+    }
+
+    public function test_update(): void
+    {
+        Seeder::seedUser();
+        Seeder::seedPost();
+        Seeder::seedScheduleDates();
+
+        $response = $this->putJson('/api/telegram-webapp/v1/post/1/schedule/1',
+            [
+                "scheduleDate" => '2027-04-04 18:30',
+            ]);
+        $response->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    "id" => 1,
+                    "creator" => [
+                        'id' => 1,
+                        'name' => 'test',
+                        'telegram_id' => '111',
+                        'login' => '111',
+                        'balance' => [
+                            'id' => 1,
+                            'value' => 0,
+                        ],
+                    ],
+                    "title" => "title",
+                    "text" => "text",
+                    "status" => "created",
+                    "schedule" => [
+                        [
+                            "id" => 1,
+                            "send_planed_date" => "2027-04-04 18:30:00",
                         ]
                     ],
                     'links' => [],

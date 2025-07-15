@@ -5,19 +5,14 @@ namespace App\Domain\Clients\TelegramWebApp\Http\Controllers;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\Post\PostResource;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostSchedule\DeletePostSchedule;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostSchedule\StorePostSchedule;
+use App\Domain\Clients\TelegramWebApp\UseCase\PostSchedule\UpdatePostSchedule;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response;
 
 class PostScheduleController extends Controller
 {
-    public function index(Request $request): JsonResponse
-    {
-        return response()->json('Method not allowed', Response::HTTP_METHOD_NOT_ALLOWED);
-    }
 
     /**
      * @param Request $request
@@ -41,22 +36,40 @@ class PostScheduleController extends Controller
     }
 
 
-    public function show(string $id)
+    /**
+     * Изменение даты расписания
+     *
+     * @param Request $request
+     * @param string $post_id
+     * @param string $id
+     * @return PostResource
+     * @throws ValidationException
+     */
+    public function update(Request $request, string $post_id, string $id): PostResource
     {
-        return response()->json('Method not allowed', Response::HTTP_METHOD_NOT_ALLOWED);
-    }
+        $validator = Validator::make(
+            ['post_id' => $post_id, 'scheduleDate' => $request->get('scheduleDate'), 'schedule_id' => $id],
+            [
+                'post_id' => 'required|integer|exists:posts,id',
+                'schedule_id' => 'required|integer|exists:post_schedules,id',
+                'scheduleDate' => 'required|date',
+            ]
+        );
+        $data = $validator->validate();
 
-
-    public function update(Request $request, string $id)
-    {
-        return response()->json('Method not allowed', Response::HTTP_METHOD_NOT_ALLOWED);
+        return app(UpdatePostSchedule::class)($data['post_id'], $data['schedule_id'], $data['scheduleDate']);
     }
 
 
     /**
+     * Удаление даты расписания
+     *
+     * @param string $post_id
+     * @param string $id
+     * @return PostResource
      * @throws ValidationException
      */
-    public function destroy(string $post_id, string $id)
+    public function destroy(string $post_id, string $id): PostResource
     {
         $validator = Validator::make(
             ['post_id' => $post_id, 'schedule_id' => $id],

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Utils;
+namespace Database\Seeders\Utils;
 
 use App\Models\BalanceAccount\BalanceAccount;
 use App\Models\Channels\ClientChannel;

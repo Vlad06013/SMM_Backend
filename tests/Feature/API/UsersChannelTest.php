@@ -2,8 +2,8 @@
 
 namespace API;
 
+use Database\Seeders\Utils\Seeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Feature\Utils\Seeder;
 use Tests\TestCase;
 
 class UsersChannelTest extends TestCase

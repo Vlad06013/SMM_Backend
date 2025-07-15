@@ -38,6 +38,23 @@ class PostScheduleService
     }
 
     /**
+     * Изменение даты расписания
+     *
+     * @param int $scheduleId
+     * @param Carbon $date
+     * @return PostSchedule
+     */
+    public function update(int $scheduleId, Carbon $date): PostSchedule
+    {
+        $postScheduleModel = $this->postScheduleStorage->show($scheduleId);
+        $postScheduleModel->send_planed_date = $date;
+
+        $this->postScheduleStorage->update($postScheduleModel);
+
+        return $postScheduleModel->fresh();
+    }
+
+    /**
      * @param int $scheduleId
      * @return PostSchedule
      */

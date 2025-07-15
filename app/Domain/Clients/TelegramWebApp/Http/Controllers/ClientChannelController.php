@@ -79,14 +79,6 @@ class ClientChannelController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param string $id
-     */
-    public function update(Request $request, string $id)
-    {
-    }
-
-    /**
      * @param string $user_id
      * @param string $id
      * @return ClientChannelResource
