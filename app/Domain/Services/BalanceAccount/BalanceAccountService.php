@@ -4,6 +4,7 @@ namespace App\Domain\Services\BalanceAccount;
 
 use App\Models\BalanceAccount\BalanceAccount;
 use App\Repository\BalanceAccountStorage;
+use RuntimeException;
 
 class BalanceAccountService
 {
@@ -15,6 +16,7 @@ class BalanceAccountService
      * Создание баланса пользователя
      *
      * @return BalanceAccount
+     * @throws RuntimeException
      */
     public function create(): BalanceAccount
     {

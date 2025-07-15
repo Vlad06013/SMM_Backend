@@ -5,6 +5,7 @@ namespace App\Domain\Services\Link;
 use App\Domain\Services\Link\DTO\CreateLinkDTO;
 use App\Models\Post\Link;
 use App\Repository\LinkStorage;
+use RuntimeException;
 
 class LinkService
 {
@@ -17,6 +18,7 @@ class LinkService
      *
      * @param int $linkId
      * @return Link
+     * @throws RuntimeException
      */
     public function delete(int $linkId): Link
     {
@@ -28,6 +30,7 @@ class LinkService
      *
      * @param CreateLinkDTO $linkDto
      * @return Link
+     * @throws RuntimeException
      */
     public function create(CreateLinkDTO $linkDto): Link
     {
@@ -46,6 +49,7 @@ class LinkService
      * @param string $title
      * @param string $url
      * @return bool
+     * @throws RuntimeException
      */
     public function update(int $linkId, string $title, string $url): bool
     {

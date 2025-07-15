@@ -4,19 +4,22 @@ namespace App\Domain\Services\ClientChannel;
 
 use App\Domain\Services\ClientChannel\DTO\CreateClientChannelDto;
 use App\Models\Channels\ClientChannel;
-use App\Models\Post\Post;
 use App\Repository\ClientChannelStorage;
 use Illuminate\Support\Collection;
+use RuntimeException;
 
 class ClientChannelService
 {
-    public function __construct( protected ClientChannelStorage $clientChannelStorage) {}
+    public function __construct(protected ClientChannelStorage $clientChannelStorage)
+    {
+    }
 
     /**
      * Создание канала
      *
      * @param CreateClientChannelDto $createClientChannelDto
      * @return ClientChannel
+     * @throws RuntimeException
      */
     public function create(CreateClientChannelDto $createClientChannelDto): ClientChannel
     {
@@ -37,6 +40,7 @@ class ClientChannelService
      *
      * @param int $userId
      * @return Collection<ClientChannel>|null
+     * @throws RuntimeException
      */
     public function getByUserId(int $userId): ?Collection
     {
@@ -48,6 +52,7 @@ class ClientChannelService
      *
      * @param int $channelId
      * @return ClientChannel|null
+     * @throws RuntimeException
      */
     public function show(int $channelId): ?ClientChannel
     {
@@ -59,6 +64,7 @@ class ClientChannelService
      *
      * @param int $channelId
      * @return ClientChannel|null
+     * @throws RuntimeException
      */
     public function delete(int $channelId): ?ClientChannel
     {

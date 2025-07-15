@@ -6,6 +6,7 @@ use App\Models\Post\PostSchedule;
 use App\Repository\PostScheduleStorage;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use RuntimeException;
 
 class PostScheduleService
 {
@@ -19,6 +20,7 @@ class PostScheduleService
      * @param int $postId
      * @param array $dates
      * @return Collection<PostSchedule>
+     * @throws RuntimeException
      */
     public function create(int $postId, array $dates): Collection
     {
@@ -43,6 +45,7 @@ class PostScheduleService
      * @param int $scheduleId
      * @param Carbon $date
      * @return PostSchedule
+     * @throws RuntimeException
      */
     public function update(int $scheduleId, Carbon $date): PostSchedule
     {
@@ -55,8 +58,11 @@ class PostScheduleService
     }
 
     /**
+     * Удаление даты постинга
+     *
      * @param int $scheduleId
      * @return PostSchedule
+     * @throws RuntimeException
      */
     public function delete(int $scheduleId): PostSchedule
     {

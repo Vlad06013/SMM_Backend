@@ -7,7 +7,7 @@ namespace App\Domain\Services\User\DTO;
  * @property string $telegram_id
  * @property string $login
  */
-class CreateUserDto
+class UserDto
 {
     public function __construct(
         public string $name,

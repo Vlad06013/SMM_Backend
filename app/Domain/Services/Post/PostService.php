@@ -8,11 +8,12 @@ use App\Domain\Support\Enumerations\Post\PostStatusEnum;
 use App\Models\Post\Post;
 use App\Repository\PostStorage;
 use Illuminate\Support\Collection;
+use RuntimeException;
 
 class PostService
 {
     public function __construct(
-        protected PostStorage          $postStorage,
+        protected PostStorage $postStorage,
     )
     {
     }
@@ -22,6 +23,7 @@ class PostService
      *
      * @param CreatePostDto $postDto
      * @return Post
+     * @throws RuntimeException
      */
     public function create(CreatePostDto $postDto): Post
     {
@@ -35,8 +37,11 @@ class PostService
     }
 
     /**
+     * Получение поста по Ид
+     *
      * @param int $id
      * @return Post|null
+     * @throws RuntimeException
      */
     public function show(int $id): ?Post
     {
@@ -48,6 +53,7 @@ class PostService
      *
      * @param int $userId
      * @return Collection<Post>|null
+     * @throws RuntimeException
      */
     public function getByUserId(int $userId): ?Collection
     {
@@ -59,6 +65,7 @@ class PostService
      *
      * @param int $postId
      * @return Post
+     * @throws RuntimeException
      */
     public function delete(int $postId): Post
     {
@@ -70,6 +77,7 @@ class PostService
      *
      * @param UpdatePostDto $updatePostDto
      * @return Post
+     * @throws RuntimeException
      */
     public function update(UpdatePostDto $updatePostDto): Post
     {

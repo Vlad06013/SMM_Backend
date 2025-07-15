@@ -3,11 +3,11 @@
 namespace App\Domain\Services\User;
 
 use App\Domain\Services\BalanceAccount\BalanceAccountService;
-use App\Domain\Services\User\DTO\CreateUserDto;
-use App\Domain\Services\User\DTO\UpdateUserDto;
+use App\Domain\Services\User\DTO\UserDto;
 use App\Models\User;
 use App\Repository\UserStorage;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class UserService
 {
@@ -21,10 +21,11 @@ class UserService
     /**
      * Создание пользователя с нулевым балансом
      *
-     * @param CreateUserDto $dto
+     * @param UserDto $dto
      * @return User|null
+     * @throws RuntimeException
      */
-    public function create(CreateUserDto $dto): ?User
+    public function create(UserDto $dto): ?User
     {
         $userCreated = null;
 
@@ -43,20 +44,20 @@ class UserService
     /**
      * Обновление пользователя
      *
-     * @param UpdateUserDto $userDto
-     * @return User|null
+     * @param int $userId
+     * @param UserDto $userDto
+     * @return bool
+     * @throws RuntimeException
      */
-    public function update(UpdateUserDto $userDto): ?User
+    public function update(int $userId, UserDto $userDto): bool
     {
-        $user = $this->userStorage->show($userDto->id);
+        $user = $this->userStorage->show($userId);
         $userDto = collect($userDto)->filter(function ($value) {
             return !is_null($value);
         })->all();
         $user->fill($userDto);
 
-        $this->userStorage->update($user);
-
-        return $user->fresh();
+        return $this->userStorage->update($user);
     }
 
     /**
@@ -64,6 +65,7 @@ class UserService
      *
      * @param int $id
      * @return User|null
+     * @throws RuntimeException
      */
     public function getById(int $id): ?User
     {
@@ -75,6 +77,7 @@ class UserService
      *
      * @param int $id
      * @return User|null
+     * @throws RuntimeException
      */
     public function delete(int $id): ?User
     {

@@ -4,6 +4,7 @@ namespace App\Domain\Services\PostChannel;
 
 use App\Models\Post\PostChannel;
 use App\Repository\PostChannelStorage;
+use RuntimeException;
 
 class PostChannelService
 {
@@ -17,11 +18,12 @@ class PostChannelService
      * @param int $postId
      * @param int $channelId
      * @return PostChannel
+     * @throws RuntimeException
      */
     public function create(int $postId, int $channelId): PostChannel
     {
         if ($this->postChannelStorage->getByPostIdChannelID($postId, $channelId)) {
-            throw new \RuntimeException('Канал публикации уже назначен посту');
+            throw new \RuntimeException('Канал публикации уже назначен посту.');
         }
         $postChannel = new PostChannel();
         $postChannel->post_id = $postId;
@@ -36,11 +38,13 @@ class PostChannelService
      * @param int $postId
      * @param int $channelId
      * @return PostChannel
+     * @throws RuntimeException
      */
     public function delete(int $postId, int $channelId): PostChannel
     {
-        $postChannel = $this->postChannelStorage->getByPostIdChannelID($postId, $channelId);
-
-        return $this->postChannelStorage->destroy($postChannel->id);
+        if ($postChannel = $this->postChannelStorage->getByPostIdChannelID($postId, $channelId)) {
+            return $this->postChannelStorage->destroy($postChannel->id);
+        }
+        throw new \RuntimeException('Канал публикации не назначен посту.');
     }
 }
