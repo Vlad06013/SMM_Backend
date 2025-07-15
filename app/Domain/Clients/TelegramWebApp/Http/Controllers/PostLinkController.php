@@ -2,7 +2,6 @@
 
 namespace App\Domain\Clients\TelegramWebApp\Http\Controllers;
 
-use App\Domain\Clients\TelegramWebApp\Http\Requests\UpdatePostRequest;
 use App\Domain\Clients\TelegramWebApp\Http\Resources\Post\PostResource;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\DeletePostLink;
 use App\Domain\Clients\TelegramWebApp\UseCase\PostLink\StorePostLink;
@@ -53,7 +52,7 @@ class PostLinkController extends Controller
      * @throws ValidationException
      */
 
-    public function update(Request $request, string $post_id, string $id)
+    public function update(Request $request, string $post_id, string $id): PostResource
     {
         $validator = Validator::make(
             ['post_id' => $post_id, 'link' => $request->get('link'), 'link_id' => $id],
@@ -78,7 +77,7 @@ class PostLinkController extends Controller
      * @return PostResource
      * @throws ValidationException
      */
-    public function destroy(string $post_id, string $id)
+    public function destroy(string $post_id, string $id): PostResource
     {
         $validator = Validator::make(
             ['post_id' => $post_id, 'link_id' => $id],
