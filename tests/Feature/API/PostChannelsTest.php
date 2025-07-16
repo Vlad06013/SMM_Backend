@@ -1,6 +1,6 @@
 <?php
 
-namespace API;
+namespace Tests\Feature\API;
 
 use Database\Seeders\Utils\Seeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
