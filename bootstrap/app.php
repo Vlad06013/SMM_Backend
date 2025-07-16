@@ -27,6 +27,10 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json(['error' => "Недостаточно прав."], Response::HTTP_UNAUTHORIZED);
         });
         $exceptions->render(function (RuntimeException $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode());
+            $code = $e->getCode();
+            $code = is_int($code) ? $code : Response::HTTP_INTERNAL_SERVER_ERROR;
+            $code = $code !== 0 ? $code : Response::HTTP_INTERNAL_SERVER_ERROR;
+
+            return response()->json(['error' => $e->getMessage()], $code);
         });
     })->create();
